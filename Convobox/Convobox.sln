@@ -1,0 +1,63 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Convobox.Client", "Convobox.Client\Convobox.Client\Convobox.Client.csproj", "{25EB469E-7727-4B09-BA47-18EE1FEEC285}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Convobox.Client.Android", "Convobox.Client\Convobox.Client.Android\Convobox.Client.Android.csproj", "{F7A68B2E-E1FD-4B95-A9BB-321B752B880D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Convobox.Client.Desktop", "Convobox.Client\Convobox.Client.Desktop\Convobox.Client.Desktop.csproj", "{97F21D63-CDF2-40D0-92CD-06D9DCDD37DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Convobox.Client.iOS", "Convobox.Client\Convobox.Client.iOS\Convobox.Client.iOS.csproj", "{6CDD254F-EB4E-4B33-8B58-08CD7A405473}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Convobox.Client.Browser", "Convobox.Client\Convobox.Client.Browser\Convobox.Client.Browser.csproj", "{D7493707-5D73-456B-8477-D694BBDBFA15}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Convobox.Server", "Convobox.Server\Convobox.Server.csproj", "{0074A445-1C42-4944-A2E8-64CBF5F0CF13}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+		Debug with testing data|Any CPU = Debug with testing data|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25EB469E-7727-4B09-BA47-18EE1FEEC285}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25EB469E-7727-4B09-BA47-18EE1FEEC285}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25EB469E-7727-4B09-BA47-18EE1FEEC285}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25EB469E-7727-4B09-BA47-18EE1FEEC285}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25EB469E-7727-4B09-BA47-18EE1FEEC285}.Debug with testing data|Any CPU.ActiveCfg = Debug with testing data|Any CPU
+		{25EB469E-7727-4B09-BA47-18EE1FEEC285}.Debug with testing data|Any CPU.Build.0 = Debug with testing data|Any CPU
+		{F7A68B2E-E1FD-4B95-A9BB-321B752B880D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7A68B2E-E1FD-4B95-A9BB-321B752B880D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7A68B2E-E1FD-4B95-A9BB-321B752B880D}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{F7A68B2E-E1FD-4B95-A9BB-321B752B880D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7A68B2E-E1FD-4B95-A9BB-321B752B880D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7A68B2E-E1FD-4B95-A9BB-321B752B880D}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{F7A68B2E-E1FD-4B95-A9BB-321B752B880D}.Debug with testing data|Any CPU.ActiveCfg = Debug with testing data|Any CPU
+		{F7A68B2E-E1FD-4B95-A9BB-321B752B880D}.Debug with testing data|Any CPU.Build.0 = Debug with testing data|Any CPU
+		{97F21D63-CDF2-40D0-92CD-06D9DCDD37DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97F21D63-CDF2-40D0-92CD-06D9DCDD37DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97F21D63-CDF2-40D0-92CD-06D9DCDD37DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97F21D63-CDF2-40D0-92CD-06D9DCDD37DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97F21D63-CDF2-40D0-92CD-06D9DCDD37DE}.Debug with testing data|Any CPU.ActiveCfg = Debug with testing data|Any CPU
+		{97F21D63-CDF2-40D0-92CD-06D9DCDD37DE}.Debug with testing data|Any CPU.Build.0 = Debug with testing data|Any CPU
+		{6CDD254F-EB4E-4B33-8B58-08CD7A405473}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CDD254F-EB4E-4B33-8B58-08CD7A405473}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CDD254F-EB4E-4B33-8B58-08CD7A405473}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6CDD254F-EB4E-4B33-8B58-08CD7A405473}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CDD254F-EB4E-4B33-8B58-08CD7A405473}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CDD254F-EB4E-4B33-8B58-08CD7A405473}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6CDD254F-EB4E-4B33-8B58-08CD7A405473}.Debug with testing data|Any CPU.ActiveCfg = Debug with testing data|Any CPU
+		{6CDD254F-EB4E-4B33-8B58-08CD7A405473}.Debug with testing data|Any CPU.Build.0 = Debug with testing data|Any CPU
+		{D7493707-5D73-456B-8477-D694BBDBFA15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7493707-5D73-456B-8477-D694BBDBFA15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7493707-5D73-456B-8477-D694BBDBFA15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7493707-5D73-456B-8477-D694BBDBFA15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7493707-5D73-456B-8477-D694BBDBFA15}.Debug with testing data|Any CPU.ActiveCfg = Debug with testing data|Any CPU
+		{D7493707-5D73-456B-8477-D694BBDBFA15}.Debug with testing data|Any CPU.Build.0 = Debug with testing data|Any CPU
+		{0074A445-1C42-4944-A2E8-64CBF5F0CF13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0074A445-1C42-4944-A2E8-64CBF5F0CF13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0074A445-1C42-4944-A2E8-64CBF5F0CF13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0074A445-1C42-4944-A2E8-64CBF5F0CF13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0074A445-1C42-4944-A2E8-64CBF5F0CF13}.Debug with testing data|Any CPU.ActiveCfg = Debug with testing data|Any CPU
+		{0074A445-1C42-4944-A2E8-64CBF5F0CF13}.Debug with testing data|Any CPU.Build.0 = Debug with testing data|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,74 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Convobox.Client.Views.LoginView"
+             xmlns:wpf="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
+             x:CompileBindings="False">
+    <Grid Height="350" Width="250" HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+            <ColumnDefinition Width="0.5*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            
+            <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition Height="0.2*"></RowDefinition>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="40"></RowDefinition>
+
+        </Grid.RowDefinitions>
+        <TextBox UseFloatingWatermark="True"
+                 wpf:TextFieldAssist.Label="Instance" 
+                 Text="{Binding Address}"
+                 IsEnabled="{Binding ShowTextFields}"
+                 Grid.Row="0" Grid.ColumnSpan="2"
+                 
+                 />
+        <TextBox UseFloatingWatermark="True"
+                 wpf:TextFieldAssist.Label="Port" 
+                 Text="{Binding PortString}"
+                 IsEnabled="{Binding ShowTextFields}"
+                 Grid.Row="0" Grid.Column="3"
+                 
+                 />
+        <TextBox UseFloatingWatermark="True"
+                 wpf:TextFieldAssist.Label="Username" 
+                 Text="{Binding Username}"
+                 IsEnabled="{Binding ShowTextFields}"
+                 Grid.Row="1" Grid.ColumnSpan="3"
+                 />
+        <TextBox UseFloatingWatermark="True"
+                 IsEnabled="{Binding ShowTextFields}"
+                 Text="{Binding Password}"
+                 wpf:TextFieldAssist.Label="Password" PasswordChar="*" 
+                 Grid.Row="2" Grid.ColumnSpan="3"
+                 />
+        <Button Grid.Row="3" 
+                Content="Login" 
+                Margin="0 5 2.5 0"
+                IsEnabled="{Binding ButtonsVisible}"
+                Command="{Binding TryLoginCommand}"/>
+        <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" 
+                Content="Register" 
+                Margin="2.5 5 0 0"
+                Classes="Light"
+                IsEnabled="{Binding ButtonsVisible}"
+                Command="{Binding TryRegisterCommand}"/>
+        <Label Content="{Binding ErrorFlagContent}" 
+               Grid.Row="4" Grid.ColumnSpan="3" 
+               Margin="0 5 0 0" Foreground="{Binding ErrorFlagBrush}" 
+               IsEnabled="{Binding ErrorFlag}"/>
+        
+        <ProgressBar Classes="Circle" IsIndeterminate="True"  Margin="4"
+                     Grid.Row="5" Grid.ColumnSpan="3"
+                     IsEnabled="{Binding ShowProcessIndicator}"
+                     IsVisible="{Binding ShowProcessIndicator}"/>
+        
+
+    </Grid>
+</UserControl>
