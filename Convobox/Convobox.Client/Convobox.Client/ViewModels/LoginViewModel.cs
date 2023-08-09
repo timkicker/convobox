@@ -83,13 +83,14 @@ public class LoginViewModel : ViewModelBase
                 ErrorFlagContent = "Could not connect to server";
                 ErrorFlag = true;
                 Connecting = false;
+                return;
             }
             
             if (ClientConversationManager.IsLoggedIn)
             {
                 var getRooms = new CommandMessge()
                 {
-                    Amount = 100,
+                    Amount = 80,
                     Type = CommandType.MessagesReq
                 };
                 
@@ -236,7 +237,7 @@ public class LoginViewModel : ViewModelBase
         get => _password;
         set
         {
-            _username = this.RaiseAndSetIfChanged(ref _password, value);
+            _password = this.RaiseAndSetIfChanged(ref _password, value);
             CheckButtonVisibility();
         }
     }

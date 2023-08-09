@@ -7,22 +7,47 @@
              x:CompileBindings="False"
              xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+    
+    <UserControl.Styles>
+        <Style Selector="TextBlock.h1">
+            
+        </Style>
+    </UserControl.Styles>
+    
+    
     <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Bottom" Height="50" Background="#262626">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="50"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox Classes="Floating" Margin="10 0 0 0 " AcceptsReturn="True" MaxHeight="100" TextWrapping="Wrap"></TextBox>
-            <Button Grid.Column="1" Margin="6" Classes="Flat">
+            <TextBox Classes="Floating" Margin="10 0 0 0 " AcceptsReturn="True" MaxHeight="100" TextWrapping="Wrap" Text="{Binding EnteredText}"></TextBox>
+            <Button Grid.Column="1" Margin="6" Classes="Flat" Command="{Binding SendButtonCommand}">
             <materialIcons:MaterialIcon
                 Width="20" Height="20"
                 Kind="Send"
             />
             </Button>
         </Grid>
-        <Grid>
-            
-        </Grid>
+        <ScrollViewer Margin="20" x:Name="ChatScrollViewer">
+            <ItemsRepeater ItemsSource="{Binding History}" x:Name="ChatItemsRepeater">
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate>
+                        <Grid MinHeight="30">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition Width="80"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            
+                            <TextBlock Text="{Binding UsernameDisplay}" ></TextBlock>
+                            <TextBlock Grid.Column="1" Text="{Binding Data}" ></TextBlock>
+                            <TextBlock  Grid.Column="2" Text="{Binding DateDisplay}" Foreground="DarkGray"></TextBlock>
+                            
+                        </Grid>
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </ScrollViewer>
     </DockPanel>
 </UserControl>

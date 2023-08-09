@@ -22,10 +22,10 @@ public static class ServerMessageController
 
                 if (loggedIn)
                 {
-                    ServerConversationManager.ClientAuth[clientId] = commandMsg.UserData;
                     var loginSuccess = new CommandMessge();
                     loginSuccess.Type = CommandType.LoginSuccess;
                     loginSuccess.UserData = DatabaseManager.GetUser(commandMsg.UserData.Name);
+                    ServerConversationManager.ClientAuth[clientId] = loginSuccess.UserData;
                     ServerConversationManager.SendMessage(loginSuccess,clientId);
                     Console.WriteLine($"[INFO][Account] Client {clientId} successfully logged in");
                 }
@@ -41,7 +41,10 @@ public static class ServerMessageController
                 Console.WriteLine($"[INFO][Account] Client {clientId} wants to register");
                 try
                 {
-                    registered = DatabaseManager.CreateUser(commandMsg.UserData);
+                    int createdId = DatabaseManager.CreateUser(commandMsg.UserData);
+                    if (createdId == 0)
+                        throw new Exception("Could not create user");
+                    registered = true;
                 }
                 catch (Exception e)
                 {
@@ -50,9 +53,9 @@ public static class ServerMessageController
 
                 if (registered)
                 {
-                    ServerConversationManager.ClientAuth[clientId] = commandMsg.UserData;
                     var registerSuccess = new CommandMessge(CommandType.RegisterSuccess);   
                     registerSuccess.UserData = DatabaseManager.GetUser(commandMsg.UserData.Name);
+                    ServerConversationManager.ClientAuth[clientId] = registerSuccess.UserData;
                     ServerConversationManager.SendMessage(registerSuccess,clientId);
                     Console.WriteLine($"[INFO][Account] Client {clientId} successfully registered");
                 }
@@ -73,7 +76,30 @@ public static class ServerMessageController
                 ServerConversationManager.SendMessage(messagesRep,clientId);
                 Console.WriteLine($"[INFO][Account] Sent client {clientId} history of {list.Count} messages");
                 break;
+            case CommandType.SendMessage:
                 
+                var user = ServerConversationManager.ClientAuth[clientId];
+                commandMsg.UserData = user;
+                commandMsg.ConvoMessage.User = user;
+                commandMsg.ConvoMessage.Creation = DateTime.Now;    // do not trust client
+                
+                Console.WriteLine($"[INFO][Message] {commandMsg.UserData.Name} under {clientId} sent: {commandMsg.ConvoMessage.Data} ");
+                int id = DatabaseManager.InsertMessage(commandMsg.ConvoMessage);
+                
+                // overwrite user so clients do not receiver the other user's password
+                commandMsg.UserData = new User() { Name = user.Name , Id = user.Id, Creation = user.Creation, LastOnline = user.LastOnline};
+                
+                var singleMessage = new CommandMessge()
+                {
+                    Type = CommandType.NewSingleMessage,
+                    ConvoMessage = commandMsg.ConvoMessage
+                };
+                singleMessage.UserData = commandMsg.UserData;
+                singleMessage.ConvoMessage.User = commandMsg.UserData;
+                singleMessage.ConvoMessage.Id = id;
+                
+                ServerConversationManager.SendNewMessageToAllConnected(singleMessage);
+                break;
         }
     }
 }

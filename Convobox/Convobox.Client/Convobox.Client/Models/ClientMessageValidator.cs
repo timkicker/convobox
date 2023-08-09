@@ -35,13 +35,19 @@ public static class ClientMessageValidator
                         // skip till new entries
                         break;
                     }
+
+                    msg.Messages[i].ClientMessages = ChatViewModel.History;
                     ChatViewModel.History.Add(msg.Messages[i]);
                 }
                 List<ConvoMessage> sorted = ChatViewModel.History.OrderBy(o=>o.Id).ToList();
                 ChatViewModel.History.Clear();
                 ChatViewModel.History.AddRange(sorted);
                 break;
-
+            case CommandType.NewSingleMessage:
+                msg.ConvoMessage.ClientMessages = ChatViewModel.History;
+                ChatViewModel.History.Add(msg.ConvoMessage);
+                ChatViewModel.CheckScroll();
+                break;
             
         }
     }

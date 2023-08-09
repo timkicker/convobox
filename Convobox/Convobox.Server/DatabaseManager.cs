@@ -15,7 +15,7 @@ public class DatabaseManager
         }
         else // GNU+Linux & MacOS
         {
-            databaseLocation = $@"Data Source={AppDomain.CurrentDomain.BaseDirectory}convobase.sqlite";
+            databaseLocation = $@"Data Source=/home/tim/Repo/convobox/Convobox/Convobox.Server/convobase.sqlite";
         }
     }
 
@@ -73,7 +73,7 @@ public class DatabaseManager
         }
     }
 
-    public static bool InsertMessage(ConvoMessage msg)
+    public static int InsertMessage(ConvoMessage msg)
     {
         try
         {
@@ -84,7 +84,7 @@ public class DatabaseManager
                 var command = connection.CreateCommand();
                 command.CommandText = $"insert into convo_message (user_id,data,creation_date) values(@userId,@data,@creationDate);";
                 
-                command.Parameters.Add("@userId", SqliteType.Text);
+                command.Parameters.Add("@userId", SqliteType.Integer);
                 command.Parameters["@userId"].Value = msg.User.Id;
                 
                 command.Parameters.Add("@data", SqliteType.Text);
@@ -92,15 +92,26 @@ public class DatabaseManager
                 
                 command.Parameters.Add("@creationDate", SqliteType.Text);
                 command.Parameters["@creationDate"].Value = ParseToSQLiteDateTime(msg.Creation);
-
                 command.ExecuteReader();
+                
+                var getIdCommand = connection.CreateCommand();
+                getIdCommand.CommandText = $"select * FROM (select convo_message.id from convo_message inner join user on user.id = convo_message.user_id order by convo_message.id desc limit 1) order by id;";
+                
 
-                return true;
+                using (var reader = getIdCommand.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        return reader.GetInt32(0);
+                    }
+                }
+
+                return 0;
             }
         }
         catch (Exception e)
         {
-            return false;
+            return 0;
         }
     }
 
@@ -129,8 +140,6 @@ public class DatabaseManager
                             return true;
                         else return false;
                     }
-                    
-
                 }
 
             }
@@ -143,12 +152,12 @@ public class DatabaseManager
         return false;
     }
 
-    public static bool CreateUser(User userToCreate)
+    public static int CreateUser(User userToCreate)
     {
         if (GetUser(userToCreate.Name) is not null)
         {
             // user already exists
-            return false;
+            return 0;
         }
         
         try
@@ -158,7 +167,7 @@ public class DatabaseManager
                 connection.Open();
 
                 var command = connection.CreateCommand();
-                command.CommandText = $"insert into user (name,password,creation_date,last_online_date) values(@name,@password,@creation,@creation);";
+                command.CommandText = $"insert into user (name,password,creation_date,last_online_date,admin) values(@name,@password,@creation,@creation,0);";
                 
                 command.Parameters.Add("@name", SqliteType.Text);
                 command.Parameters["@name"].Value = userToCreate.Name;
@@ -170,12 +179,30 @@ public class DatabaseManager
                 command.Parameters["@creation"].Value = ParseToSQLiteDateTime(DateTime.Now);
 
                 command.ExecuteReader();
-                return true;
+                
+                connection.Open();
+
+                var getIdCommand = connection.CreateCommand();
+                getIdCommand.CommandText = $"select user.id from user where name=@name";
+                
+                getIdCommand.Parameters.Add("@name", SqliteType.Text);
+                getIdCommand.Parameters["@name"].Value = userToCreate.Name;
+
+                using (var reader = getIdCommand.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        return reader.GetInt32(0);
+                    }
+                }
+                
+                
+                return 0;
             }
         }
         catch (Exception e)
         {
-            return false;
+            return 0;
         }
         
     }

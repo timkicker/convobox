@@ -1,3 +1,5 @@
+using System.Text;
+using System.Text.Json;
 using MemoryPack;
 namespace Convobox.Server;
 
@@ -25,17 +27,21 @@ public partial class CommandMessge
     public CommandMessge(CommandType type)
     {
         _type = type;
-        _creationTime = DateTime.Now;
+        _creationTime = DateTime.Now;   
     }
     
     public byte[] Serialize()
     {
-        return MemoryPackSerializer.Serialize(this);
+        //return MemoryPackSerializer.Serialize(this);
+        string jsonString = JsonSerializer.Serialize(this);
+        return Encoding.UTF8.GetBytes(jsonString);
     }
 
     public static CommandMessge Deserialize(byte[] messageBytes)
     {
-        return MemoryPackSerializer.Deserialize<CommandMessge>(messageBytes);
+        //return MemoryPackSerializer.Deserialize<CommandMessge>(messageBytes);
+        string jsonString = Encoding.UTF8.GetString(messageBytes);
+        return JsonSerializer.Deserialize<CommandMessge>(jsonString);
     }
 
     public List<ConvoMessage> Messages
@@ -78,6 +84,7 @@ public enum CommandType
     GetMessagesReq,
     EchoReq,
     MessagesReq,
+    SendMessage,
     
     
     LoginError,

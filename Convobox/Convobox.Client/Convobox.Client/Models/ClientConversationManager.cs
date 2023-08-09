@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
@@ -77,6 +78,8 @@ public static class ClientConversationManager
     public static void CloseConnection()
     {
         _cancellationTokenSource?.Cancel();
+        _client?.Close();
+        _client?.Dispose();
         
     }
     
@@ -123,18 +126,22 @@ public static class ClientConversationManager
         CancellationToken token = (CancellationToken)obj;
         while (!token.IsCancellationRequested)
         {
-            byte[] buffer = new byte[4096];
-            int byte_count = _stream.Read(buffer, 0, buffer.Length);
-            if (byte_count == 0)
-            {
-                break;
-            }
 
-            LastCommandReceivedTime = DateTime.Now;
-            var receivedMessage = CommandMessge.Deserialize(buffer);
-            ClientMessageValidator.Validate((receivedMessage));
+            if (_client.Available > 0)
+            {
+                byte[] buffer = new byte[_client.ReceiveBufferSize];
+                int byte_count = _stream.Read(buffer, 0, buffer.Length);
+                if (byte_count == 0)
+                {
+                    break;
+                }
+
+                var bytesWanted = buffer.Skip(0).Take(byte_count).ToArray();            
             
-            
+                LastCommandReceivedTime = DateTime.Now;
+                var receivedMessage = CommandMessge.Deserialize(bytesWanted);
+                ClientMessageValidator.Validate((receivedMessage));
+            }
         }
         
     }

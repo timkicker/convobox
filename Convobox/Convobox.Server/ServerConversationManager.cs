@@ -37,6 +37,22 @@ public static class ServerConversationManager
         NetworkStream stream = client.GetStream();
         stream.Write(msg.Serialize());
     }
+    public static void SendMessage(CommandMessge msg, TcpClient client)
+    {
+        NetworkStream stream = client.GetStream();
+        stream.Write(msg.Serialize());
+    }
+
+    public static void SendNewMessageToAllConnected(CommandMessge msg)
+    {
+        foreach (var client in _clients)
+        {
+            if (client.Value.Connected)
+            {
+                SendMessage(msg,client.Value);
+            }
+        }
+    }
 
     public static void ClientThreadHandler(object o)
     {
@@ -50,15 +66,17 @@ public static class ServerConversationManager
             try
             {
                 NetworkStream stream = client.GetStream();
-                byte[] buffer = new byte[1024];
+                byte[] buffer = new byte[client.ReceiveBufferSize];
                 int byte_count = stream.Read(buffer, 0, buffer.Length);
 
                 if (byte_count == 0)
                 {
                     break;
                 }
+                
+                var bytesWanted = buffer.Skip(0).Take(byte_count).ToArray();
 
-                var receivedMessage = CommandMessge.Deserialize(buffer);
+                var receivedMessage = CommandMessge.Deserialize(bytesWanted);
                 Console.WriteLine("[INFO][Received] Client " + id + "sent a " + receivedMessage.Type.ToString());
                 ServerMessageController.Validate(receivedMessage,id);
             }
