@@ -1,5 +1,7 @@
 using System;
+using System.Configuration;
 using System.Drawing;
+using System.IO;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -43,8 +45,22 @@ public partial class App : Application
         }
         
         
+
         ThemeManager.App = this;
         ThemeManager.UpdateTheme();
+
+        try
+        {
+            Settings.Load();
+            ThemeManager.SetTheme(Settings.Current.Theme);
+            ThemeManager.SetPrimaryColor(Settings.Current.ColorTheme);
+        }
+        catch (Exception e)
+        {
+            
+        }
+        
+        
 
         NavigationStore.InternLogger.Log("Application", $"Startup");
 

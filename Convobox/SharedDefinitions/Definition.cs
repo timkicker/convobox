@@ -9,6 +9,7 @@ public static class Definition
     public static int MessageGetDefault { get; } = 50;
     public static int MaxUsernameLength { get; } = 10;
 
+    
 
 
 
@@ -39,9 +40,33 @@ public static class Definition
     
     public static System.Drawing.Color[] UserColors = new[]
         { Orange,Yellow,Pink,Rose,Purple,DeepPurple,Indigo,Blue,Cyan,Teal,Green,LightGreen};
+    
+    public static System.Drawing.Color[] ThemeColors = new[]
+        { Orange,Yellow,Pink,Rose,Purple,DeepPurple,Indigo,Blue,Cyan,Teal,Green,LightGreen};
+    
+    public static System.Drawing.Color[] AllColors = new[]
+        { Orange,Yellow,Pink,Rose,Purple,DeepPurple,Indigo,Blue,Cyan,Teal,Green,LightGreen};
+
+    public static Dictionary<string,string> NameColorRgbDic { get; set; } = new Dictionary<string, string>()
+    {
+        { Orange.Name,nameof(Orange) },
+        { Yellow.Name,nameof(Yellow) },
+        { Red.Name,nameof(Red)  },
+        { Pink.Name,nameof(Pink) },
+        { Rose.Name,nameof(Rose) },
+        { Purple.Name,nameof(Purple) },
+        { DeepPurple.Name,nameof(DeepPurple) },
+        { Indigo.Name,nameof(Indigo) },
+        { Blue.Name,nameof(Blue) },
+        { Cyan.Name,nameof(Cyan) },
+        { Teal.Name,nameof(Teal) },
+        { Green.Name,nameof(Green) },
+        { LightGreen.Name,nameof(LightGreen) },
+    };
+
 
 
     #endregion
-    
+
 
 }

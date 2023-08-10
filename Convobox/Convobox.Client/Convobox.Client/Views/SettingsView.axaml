@@ -3,6 +3,58 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:CompileBindings="False"
+             xmlns:cv="clr-namespace:Convobox.Client.Converters"
              x:Class="Convobox.Client.Views.SettingsView">
-    Welcome to Avalonia!
+    
+    <UserControl.Resources>
+        <cv:ColorConverter x:Key="ColorConverter"/>
+        <cv:ThicknessConverter x:Key="ThicknessConverter"/>
+        <cv:ThicknessTestConverter x:Key="ThicknessTestConverter"/>
+        <cv:ColorNameConverter x:Key="ColorNameConverter"/>
+        <cv:ColorBrushConverter x:Key="ColorBrushConverter"/>
+    </UserControl.Resources>
+    
+    <Grid MaxWidth="500" Margin="0 20 0 20">
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <TextBlock Text="Color theme"  VerticalAlignment="Center"></TextBlock>
+        <ComboBox Grid.Column="1" SelectedItem="{Binding SelectedColor}"  Classes="Filled" ItemsSource="{Binding ThemeColors}"  MaxHeight="20">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Rectangle Margin="0 0 5 0" Height="10" Width="10" Fill="{Binding Path=. ,  Converter={StaticResource ColorBrushConverter}}" Grid.Column="0" ></Rectangle>
+                        <TextBlock Grid.Column="1" Text="{Binding Path=. ,  Converter={StaticResource ColorNameConverter}}" />
+                    </Grid>
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Grid.Row="1" Text="Theme" VerticalAlignment="Center" ></TextBlock>
+        <ComboBox Grid.Row="1"  Grid.Column="1" SelectedItem="{Binding SelectedTheme}" ItemsSource="{Binding Themes}" Classes="Filled"></ComboBox>
+        
+        <TextBlock Grid.Row="2" Text="Notifications" VerticalAlignment="Center"></TextBlock>
+        <CheckBox Grid.Row="2" Grid.Column="1" ></CheckBox>
+        
+        <Button Grid.Row="20" Grid.ColumnSpan="2" Content="Save"></Button>
+        
+        
+    </Grid>
 </UserControl>

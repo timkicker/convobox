@@ -1,7 +1,10 @@
 using System;
+using System.Net.Mime;
+using Avalonia;
 using Avalonia.Controls;
 using Convobox.Client.Models;
 using Convobox.Client.ViewModels;
+using Avalonia.Platform;
 
 namespace Convobox.Client;
 
@@ -14,7 +17,7 @@ public class NavigationStore
         _mainWindowViewModel.CurrentViewModel = viewModel;
         NavigationStore.InternLogger.Log("Navigation", $"Switched to {nameof(viewModel)}");
     }
-
+    
     public static void BackToLogin(string errorMessage)
     {
         var login = new LoginViewModel()
@@ -31,6 +34,7 @@ public class NavigationStore
         set => _mainWindowViewModel = value ?? throw new ArgumentNullException(nameof(value));
     }
 
+    public static IPlatformSettings Settings { get; set; }
     public static Window MainWindow { get; set; }
     public static InternLoggerViewModel InternLogger { get; set; } = new InternLoggerViewModel();
 }

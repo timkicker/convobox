@@ -6,6 +6,10 @@
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
         <Configurations>Debug;Release;Debug with testing data</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <UserSecretsId>061755b3-c7ba-42ad-ad56-c73064015cda</UserSecretsId>
+        <Title>Convobox</Title>
+        <Authors>Tim Kicker</Authors>
+        <Copyright>Tim Kicker</Copyright>
     </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug with testing data' ">
       <DebugSymbols Condition=" '$(DebugSymbols)' == '' ">true</DebugSymbols>
@@ -35,5 +39,9 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Convobox.Server\Convobox.Server.csproj" />
       <ProjectReference Include="..\..\SharedDefinitions\SharedDefinitions.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Interfaces\" />
     </ItemGroup>
 </Project>

@@ -16,7 +16,7 @@ public partial class DashboardView : UserControl
 
     private void Button_OnClick(object? sender, RoutedEventArgs e)
     {
-        string content = (sender as Button).Content.ToString();
+        string content = (sender as Button).Tag.ToString();
 
         ViewModelBase selectedView = new ViewModelBase();
 

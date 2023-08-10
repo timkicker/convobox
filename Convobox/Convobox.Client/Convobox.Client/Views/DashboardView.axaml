@@ -23,7 +23,7 @@
               <ItemsRepeater ItemsSource="{Binding UserViews}">
                 <ItemsRepeater.ItemTemplate>
                   <DataTemplate>
-                    <Button Click="Button_OnClick" Theme="{StaticResource FlatButton}" >
+                    <Button Click="Button_OnClick" Tag="{Binding Title}" Theme="{StaticResource FlatButton}" >
                       <Grid>
                         <Grid.ColumnDefinitions>
                           <ColumnDefinition Width="*"></ColumnDefinition>
