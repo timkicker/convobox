@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "me8nCvu+GWQGVo2ICg1EKrnWMfUemclPYTy9++X1d7ISAF45kMV/1NklMPlyfxvwNZ3KYxBl1YIYSuAZG/8dtA==",
+  "dgSpecHash": "1mRlQo3G/lRlE67KQ0oLCRTyNXB3EF7BaSxJMu9uNQ47Z96zMr/fici+wUGFbk1AzNNUTnlx/nodyeWDk6FElg==",
   "success": true,
   "projectFilePath": "/home/tim/Repo/convobox/Convobox/Convobox.Server/Convobox.Server.csproj",
   "expectedPackageFiles": [
@@ -9,6 +9,7 @@
     "/home/tim/.nuget/packages/memorypack.generator/1.9.16/memorypack.generator.1.9.16.nupkg.sha512",
     "/home/tim/.nuget/packages/microsoft.data.sqlite/7.0.9/microsoft.data.sqlite.7.0.9.nupkg.sha512",
     "/home/tim/.nuget/packages/microsoft.data.sqlite.core/7.0.9/microsoft.data.sqlite.core.7.0.9.nupkg.sha512",
+    "/home/tim/.nuget/packages/newtonsoft.json/13.0.3/newtonsoft.json.13.0.3.nupkg.sha512",
     "/home/tim/.nuget/packages/sqlitepclraw.bundle_e_sqlite3/2.1.4/sqlitepclraw.bundle_e_sqlite3.2.1.4.nupkg.sha512",
     "/home/tim/.nuget/packages/sqlitepclraw.core/2.1.4/sqlitepclraw.core.2.1.4.nupkg.sha512",
     "/home/tim/.nuget/packages/sqlitepclraw.lib.e_sqlite3/2.1.4/sqlitepclraw.lib.e_sqlite3.2.1.4.nupkg.sha512",

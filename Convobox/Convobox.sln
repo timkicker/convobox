@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Convobox.Client.Browser", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Convobox.Server", "Convobox.Server\Convobox.Server.csproj", "{0074A445-1C42-4944-A2E8-64CBF5F0CF13}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharedDefinitions", "SharedDefinitions\SharedDefinitions.csproj", "{2147C0FA-972F-4EE1-9937-26A546AB4090}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,5 +61,11 @@ Global
 		{0074A445-1C42-4944-A2E8-64CBF5F0CF13}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0074A445-1C42-4944-A2E8-64CBF5F0CF13}.Debug with testing data|Any CPU.ActiveCfg = Debug with testing data|Any CPU
 		{0074A445-1C42-4944-A2E8-64CBF5F0CF13}.Debug with testing data|Any CPU.Build.0 = Debug with testing data|Any CPU
+		{2147C0FA-972F-4EE1-9937-26A546AB4090}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2147C0FA-972F-4EE1-9937-26A546AB4090}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2147C0FA-972F-4EE1-9937-26A546AB4090}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2147C0FA-972F-4EE1-9937-26A546AB4090}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2147C0FA-972F-4EE1-9937-26A546AB4090}.Debug with testing data|Any CPU.ActiveCfg = Debug|Any CPU
+		{2147C0FA-972F-4EE1-9937-26A546AB4090}.Debug with testing data|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 EndGlobal

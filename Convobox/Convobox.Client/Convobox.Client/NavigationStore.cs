@@ -14,6 +14,17 @@ public class NavigationStore
         _mainWindowViewModel.CurrentViewModel = viewModel;
         NavigationStore.InternLogger.Log("Navigation", $"Switched to {nameof(viewModel)}");
     }
+
+    public static void BackToLogin(string errorMessage)
+    {
+        var login = new LoginViewModel()
+        {
+            ErrorFlagContent = errorMessage,
+            ErrorFlag = !string.IsNullOrEmpty(errorMessage)
+        };
+        SwitchMainTo(login);
+    }
+    
     public static MainViewModel MainWindowViewModel
     {
         get => _mainWindowViewModel;

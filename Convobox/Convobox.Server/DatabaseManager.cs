@@ -1,5 +1,8 @@
+using System.Drawing;
+using System.Reflection.Metadata;
 using System.Text.RegularExpressions;
 using Microsoft.Data.Sqlite;
+using SharedDefinitions;
 
 namespace Convobox.Server;
 public class DatabaseManager
@@ -19,6 +22,35 @@ public class DatabaseManager
         }
     }
 
+    public static int GetMessageCount()
+    {
+        try
+        {
+            using (var connection = new SqliteConnection(databaseLocation))
+            {
+                connection.Open();
+
+                var command = connection.CreateCommand();
+                command.CommandText = $"select count(*) from convo_message;";
+
+                using (var reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        return reader.GetInt32(0);
+                    }
+                }
+
+                return 0;
+
+            }
+        }
+        catch (Exception)
+        {
+            return 0;
+        }
+    }
+
     public static List<ConvoMessage> GetLastMessages(int amount)
     {
 
@@ -31,7 +63,7 @@ public class DatabaseManager
                 connection.Open();
 
                 var command = connection.CreateCommand();
-                command.CommandText = $"select * FROM (select convo_message.id,convo_message.user_id,convo_message.data,convo_message.creation_date, user.name from convo_message inner join user on user.id = convo_message.user_id order by convo_message.id desc limit @amount) order by id;";
+                command.CommandText = $"select * FROM (select convo_message.id,convo_message.user_id,convo_message.data,convo_message.creation_date, user.name,user.color from convo_message inner join user on user.id = convo_message.user_id order by convo_message.id desc limit @amount) order by id;";
                 
                 command.Parameters.Add("@amount", SqliteType.Text);
                 command.Parameters["@amount"].Value = amount;
@@ -45,9 +77,11 @@ public class DatabaseManager
                         string data = reader.GetString(2);
                         DateTime creation = ParseToCSDateTime(reader.GetString(3));
                         string name = reader.GetString(4);
+                        Color userColor = GetColor(reader.GetString(5));
 
                         var user = new User();
                         user.Id = user_id;
+                        user.Color = userColor;
                         user.Name = name;
                         
                         var msg = new ConvoMessage()
@@ -73,7 +107,7 @@ public class DatabaseManager
         }
     }
 
-    public static int InsertMessage(ConvoMessage msg)
+    public static ConvoMessage InsertMessage(ConvoMessage msg)
     {
         try
         {
@@ -95,23 +129,25 @@ public class DatabaseManager
                 command.ExecuteReader();
                 
                 var getIdCommand = connection.CreateCommand();
-                getIdCommand.CommandText = $"select * FROM (select convo_message.id from convo_message inner join user on user.id = convo_message.user_id order by convo_message.id desc limit 1) order by id;";
+                getIdCommand.CommandText = $"select * FROM (select convo_message.id,user.color from convo_message inner join user on user.id = convo_message.user_id order by convo_message.id desc limit 1) order by id;";
                 
 
                 using (var reader = getIdCommand.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        return reader.GetInt32(0);
+                        msg.Id = reader.GetInt32(0);
+                        msg.User.Color = GetColor(reader.GetString(1));
+                        return msg;
                     }
                 }
 
-                return 0;
+                return null;
             }
         }
         catch (Exception e)
         {
-            return 0;
+            return null;
         }
     }
 
@@ -167,7 +203,7 @@ public class DatabaseManager
                 connection.Open();
 
                 var command = connection.CreateCommand();
-                command.CommandText = $"insert into user (name,password,creation_date,last_online_date,admin) values(@name,@password,@creation,@creation,0);";
+                command.CommandText = $"insert into user (name,password,creation_date,last_online_date,admin,color) values(@name,@password,@creation,@creation,0,@color);";
                 
                 command.Parameters.Add("@name", SqliteType.Text);
                 command.Parameters["@name"].Value = userToCreate.Name;
@@ -177,6 +213,9 @@ public class DatabaseManager
                 
                 command.Parameters.Add("@creation", SqliteType.Text);
                 command.Parameters["@creation"].Value = ParseToSQLiteDateTime(DateTime.Now);
+                
+                command.Parameters.Add("@color", SqliteType.Text);
+                command.Parameters["@color"].Value = GetColorString(Definition.GetRandomUserColor());
 
                 command.ExecuteReader();
                 
@@ -218,7 +257,7 @@ public class DatabaseManager
                 connection.Open();
 
                 var command = connection.CreateCommand();
-                command.CommandText = $"select id,name,password,creation_date,last_online_date,admin from user where name=@username;";
+                command.CommandText = $"select id,name,password,creation_date,last_online_date,admin,color from user where name=@username;";
                 
                 command.Parameters.Add("@username", SqliteType.Text);
                 command.Parameters["@username"].Value = username;
@@ -235,6 +274,7 @@ public class DatabaseManager
                         user.Creation = ParseToCSDateTime(reader.GetString(3));
                         user.LastOnline = ParseToCSDateTime(reader.GetString(4));
                         user.Admin = Convert.ToBoolean(reader.GetInt32(5));
+                        user.Color = GetColor(reader.GetString(6));
                         return user;
                     }
                 }
@@ -247,6 +287,17 @@ public class DatabaseManager
 
         return null;
 
+    }
+
+    public static Color GetColor(string color)
+    {
+        string[] rgb = color.Split(':');
+        return Color.FromArgb(255, Convert.ToInt32(rgb[0]), Convert.ToInt32(rgb[1]), Convert.ToInt32(rgb[2]));
+    }
+
+    public static string GetColorString(Color color)
+    {
+        return color.R + ":" + color.G + ":"+  color.B;
     }
     
     public static DateTime ParseToCSDateTime(string sqliteDateTime)

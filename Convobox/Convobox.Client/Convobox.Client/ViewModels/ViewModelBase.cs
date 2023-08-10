@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Material.Icons;
 using ReactiveUI;
 
 namespace Convobox.Client.ViewModels;
@@ -12,4 +13,8 @@ public class ViewModelBase : ReactiveObject, INotifyPropertyChanged
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
+    
+    public MaterialIconKind Icon { get; set; }
+    
+    public string Title { get; set; }
 }

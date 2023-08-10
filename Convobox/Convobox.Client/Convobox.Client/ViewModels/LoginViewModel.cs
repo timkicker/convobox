@@ -6,6 +6,7 @@ using Avalonia.Media.TextFormatting.Unicode;
 using Convobox.Client.Models;
 using Convobox.Server;
 using ReactiveUI;
+using SharedDefinitions;
 
 namespace Convobox.Client.ViewModels;
 
@@ -90,15 +91,15 @@ public class LoginViewModel : ViewModelBase
             {
                 var getRooms = new CommandMessge()
                 {
-                    Amount = 80,
+                    Amount = Definition.MessageGetDefault,
                     Type = CommandType.MessagesReq
                 };
                 
                 ClientConversationManager.Send(getRooms);
                 
                 // switch view
-                var chatViewModel = new ChatViewModel();
-                NavigationStore.SwitchMainTo(chatViewModel);
+                var dash = new DashboardViewModel();
+                NavigationStore.SwitchMainTo(dash);
             }
             else
             {
@@ -118,6 +119,13 @@ public class LoginViewModel : ViewModelBase
     {
         return Observable.Start(() =>
         {
+            if (Username.Length > Definition.MaxUsernameLength)
+            {
+                ErrorFlag = true;
+                ErrorFlagContent = "Username not under " + Definition.MaxUsernameLength+1 + " char.";
+            }
+            
+            
             ErrorFlag = false;
             ErrorFlagContent = " ";
             Connecting = true;
@@ -151,14 +159,14 @@ public class LoginViewModel : ViewModelBase
                 
                 var getRooms = new CommandMessge()
                 {
-                    Amount = 100,
+                    Amount = Definition.MessageGetDefault,
                     Type = CommandType.MessagesReq
                 };
                 
                 ClientConversationManager.Send(getRooms);
                 // switch view
-                var chatViewModel = new ChatViewModel();
-                NavigationStore.SwitchMainTo(chatViewModel);
+                var dash = new DashboardViewModel();
+                NavigationStore.SwitchMainTo(dash);
             }
             else
             {
@@ -278,7 +286,7 @@ public class LoginViewModel : ViewModelBase
     {
         get
         {
-            return new SolidColorBrush(App.DefinedValues.Red);
+            return new SolidColorBrush(App.ThemeManager.GetAvaloniaColor(Definition.Red));
         }
     }
 }

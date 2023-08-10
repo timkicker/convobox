@@ -1,0 +1,97 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:avalonia="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:views="clr-namespace:Convobox.Client.Views"
+             x:CompileBindings="False"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Convobox.Client.Views.DashboardView">
+  
+  <controls:NavigationDrawer Name="LeftDrawer" Classes="permanent"
+                             LeftDrawerOpened="{Binding ElementName=NavDrawerSwitch, Path=IsChecked, Mode=OneWay}"
+                             Loaded="LeftDrawer_OnLoaded"
+                             LeftDrawerWidth="200">
+        <controls:NavigationDrawer.LeftDrawerContent>
+          <ScrollViewer>
+            <DockPanel LastChildFill="True" Margin="5">
+              <TextBlock Classes="Headline6" Text="Navigation" HorizontalAlignment="Center" DockPanel.Dock="Top" />
+              <Separator DockPanel.Dock="Top"></Separator>
+              <TextBlock Text="V0.1" HorizontalAlignment="Center" DockPanel.Dock="Bottom" />
+              <ItemsRepeater ItemsSource="{Binding UserViews}">
+                <ItemsRepeater.ItemTemplate>
+                  <DataTemplate>
+                    <Button Click="Button_OnClick" Theme="{StaticResource FlatButton}" >
+                      <Grid>
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="*"></ColumnDefinition>
+                          <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <materialIcons:MaterialIcon
+                          Width="15" Height="15"
+                          Kind="{Binding Icon}"
+                          Margin="0 2 5 0"
+                          HorizontalAlignment="Right"
+                          Grid.Column="0"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Title}" HorizontalAlignment="Left" ></TextBlock>
+                      </Grid>
+                    </Button>
+                  </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+              </ItemsRepeater>
+            </DockPanel>
+          </ScrollViewer>
+        </controls:NavigationDrawer.LeftDrawerContent>
+    <DockPanel>
+      <Grid Margin="16" Height="56" DockPanel.Dock="Top">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="24" />
+          <ColumnDefinition Width="32" />
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="32" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <ToggleButton Name="NavDrawerSwitch"
+                      IsChecked="{Binding ToggleButtonChecked}"
+                      Width="32" Height="32" Padding="4">
+          <avalonia:MaterialIcon Kind="Menu" Width="24" Height="24" />
+        </ToggleButton>
+        <TextBlock Grid.Column="2" Classes="Headline6" Text="{Binding SelectedView.Title}"
+                   VerticalAlignment="Center" />
+        <Menu Grid.Column="4" Height="32" Padding="0" Margin="0">
+          <MenuItem Height="32" Width="32" Header="{avalonia:MaterialIconExt DotsVertical, Size=24}" Command="{Binding LogoutButtonCommand}">
+            <MenuItem Header="Logout" >
+              <MenuItem.Icon>
+                <avalonia:MaterialIcon Kind="ExitRun" Width="24" Height="24" />
+              </MenuItem.Icon>
+            </MenuItem>
+          </MenuItem>
+        </Menu>
+      </Grid>
+      
+      <Border HorizontalAlignment="Stretch"
+              VerticalAlignment="Stretch">
+        <Carousel Name="PageCarousel"
+                  HorizontalAlignment="Stretch"
+                  SelectedIndex="{Binding SelectedCarouselIndex}">
+          <Carousel.Styles>
+            <Style Selector="Carousel#PageCarousel:not(.no-transitions)">
+              <Setter Property="PageTransition">
+                <PageSlide Duration="0.25" SlideOutEasing="CircularEaseOut"
+                           SlideInEasing="CircularEaseOut" />
+              </Setter>
+            </Style>
+          </Carousel.Styles>
+          <!-- Main page -->
+          <views:ChatView DataContext="{Binding ChatViewModel}"/>
+          <views:SettingsView DataContext="{Binding SettingsViewModel}"/>
+        </Carousel>
+      </Border>
+      
+    </DockPanel>
+     
+        
+    </controls:NavigationDrawer>
+</UserControl>

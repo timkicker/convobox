@@ -6,7 +6,7 @@
              x:Class="Convobox.Client.Views.LoginView"
              xmlns:wpf="clr-namespace:Material.Styles.Assists;assembly=Material.Styles"
              x:CompileBindings="False">
-    <Grid Height="350" Width="250" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid Height="400" Width="250" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition Width="0.5*"></ColumnDefinition>
@@ -17,6 +17,7 @@
             <RowDefinition Height="0.3*"></RowDefinition>
             <RowDefinition Height="0.3*"></RowDefinition>
             <RowDefinition Height="0.3*"></RowDefinition>
+            <RowDefinition Height="0.2*"></RowDefinition>
             <RowDefinition Height="0.2*"></RowDefinition>
             <RowDefinition Height="50"></RowDefinition>
             <RowDefinition Height="40"></RowDefinition>
@@ -47,25 +48,28 @@
                  Text="{Binding Password}"
                  wpf:TextFieldAssist.Label="Password" PasswordChar="*" 
                  Grid.Row="2" Grid.ColumnSpan="3"
+                 Margin="0 0 0 5"
                  />
         <Button Grid.Row="3" 
+                Grid.ColumnSpan="3"
                 Content="Login" 
                 Margin="0 5 2.5 0"
                 IsEnabled="{Binding ButtonsVisible}"
                 Command="{Binding TryLoginCommand}"/>
-        <Button Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" 
+        <Button Grid.Row="4" Grid.ColumnSpan="3"
                 Content="Register" 
                 Margin="2.5 5 0 0"
                 Classes="Light"
                 IsEnabled="{Binding ButtonsVisible}"
                 Command="{Binding TryRegisterCommand}"/>
         <Label Content="{Binding ErrorFlagContent}" 
-               Grid.Row="4" Grid.ColumnSpan="3" 
+               Grid.Row="5" Grid.ColumnSpan="5" 
+               HorizontalAlignment="Center"
                Margin="0 5 0 0" Foreground="{Binding ErrorFlagBrush}" 
                IsEnabled="{Binding ErrorFlag}"/>
         
         <ProgressBar Classes="Circle" IsIndeterminate="True"  Margin="4"
-                     Grid.Row="5" Grid.ColumnSpan="3"
+                     Grid.Row="6" Grid.ColumnSpan="3"
                      IsEnabled="{Binding ShowProcessIndicator}"
                      IsVisible="{Binding ShowProcessIndicator}"/>
         

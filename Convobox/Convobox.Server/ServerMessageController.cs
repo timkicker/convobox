@@ -71,8 +71,10 @@ public static class ServerMessageController
                 var messagesRep = new CommandMessge()
                 {
                     Messages = list,
-                    Type = CommandType.MessagesRep
+                    Type = CommandType.MessagesRep,
+                    Amount = DatabaseManager.GetMessageCount()
                 };
+                
                 ServerConversationManager.SendMessage(messagesRep,clientId);
                 Console.WriteLine($"[INFO][Account] Sent client {clientId} history of {list.Count} messages");
                 break;
@@ -84,10 +86,10 @@ public static class ServerMessageController
                 commandMsg.ConvoMessage.Creation = DateTime.Now;    // do not trust client
                 
                 Console.WriteLine($"[INFO][Message] {commandMsg.UserData.Name} under {clientId} sent: {commandMsg.ConvoMessage.Data} ");
-                int id = DatabaseManager.InsertMessage(commandMsg.ConvoMessage);
+                commandMsg.ConvoMessage = DatabaseManager.InsertMessage(commandMsg.ConvoMessage);
                 
                 // overwrite user so clients do not receiver the other user's password
-                commandMsg.UserData = new User() { Name = user.Name , Id = user.Id, Creation = user.Creation, LastOnline = user.LastOnline};
+                commandMsg.UserData = new User() { Name = user.Name , Id = user.Id, Creation = user.Creation, LastOnline = user.LastOnline, Color = user.Color};
                 
                 var singleMessage = new CommandMessge()
                 {
@@ -96,10 +98,17 @@ public static class ServerMessageController
                 };
                 singleMessage.UserData = commandMsg.UserData;
                 singleMessage.ConvoMessage.User = commandMsg.UserData;
-                singleMessage.ConvoMessage.Id = id;
                 
                 ServerConversationManager.SendNewMessageToAllConnected(singleMessage);
                 break;
+            case CommandType.EchoReq:
+                var echoRep = new CommandMessge()
+                {
+                    Type = CommandType.EchoRep
+                };
+                ServerConversationManager.SendNewMessageToAllConnected(echoRep);
+                break;
+                
         }
     }
 }

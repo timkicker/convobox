@@ -1,4 +1,6 @@
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Convobox.Client.Models;
 
 namespace Convobox.Client.Views;

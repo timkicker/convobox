@@ -1,13 +1,14 @@
+using System.Drawing;
 using System.Runtime.InteropServices.JavaScript;
 using MemoryPack;
 
 namespace Convobox.Server;
 
-[MemoryPackable]
+
 public partial class User
 {
-    
 
+    private Color color;
     private int _id;
     private string _name;
     private string _password;
@@ -43,6 +44,7 @@ public partial class User
         get => _name;
         set => _name = value;
     }
+    
 
     public string Password
     {
@@ -62,4 +64,19 @@ public partial class User
         set => _lastOnline = value;
     }
 
+    public Color Color
+    {
+        get => color;
+        set => color = value;
+    }
+
+    public string Symbol
+    {
+        get
+        {
+            if (Admin)
+                return "★";
+            return "➤";
+        }
+    }
 }

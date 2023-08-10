@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 
 namespace Convobox.Server;
 
-[MemoryPackable]
+
 public partial class ConvoMessage
 {
     private int _id;
@@ -14,6 +14,20 @@ public partial class ConvoMessage
     
     // for client display
     public ObservableCollection<ConvoMessage> ClientMessages { get; set; } = new ObservableCollection<ConvoMessage>();
+
+
+    public string UserSymbol
+    {
+        get
+        {
+            if (UsernameDisplay?.Length > 0)
+            {
+                return User.Symbol;
+            }
+
+            return "";
+        }
+    }
     
     public string UsernameDisplay
     {
@@ -39,7 +53,6 @@ public partial class ConvoMessage
 
                     return username;
                 }
-
                 return this.User.Name;
             }
             catch (Exception e)
@@ -47,6 +60,27 @@ public partial class ConvoMessage
                 return this.User.Name;
             }
             return this.User.Name;
+        }
+    }
+
+    public string Test
+    {
+        get
+        {
+            return Data + " | " + Space;
+        }
+    }
+
+    public int Space
+    {
+        get
+        {
+            if (UsernameDisplay?.Length > 1)
+            {
+                return 20;
+            }
+
+            return 0;
         }
     }
     
@@ -57,7 +91,7 @@ public partial class ConvoMessage
             // today
             if (Creation.Day == DateTime.Now.Day &&
                 Creation.Month == DateTime.Now.Month &&
-                Creation.Year == DateTime.Now.Year)
+                Creation.Year == DateTime.Now.Year)                      
             {
                 return Creation.ToString("HH:mm");
             }

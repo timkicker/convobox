@@ -28,25 +28,31 @@ public static class ClientMessageValidator
                 ClientConversationManager.IsLoggedIn = false;
                 break;
             case CommandType.MessagesRep:
+                msg.Messages.Reverse();
                 for (int i = 0; i < msg.Messages.Count; i++)
                 {
-                    if (i < ChatViewModel.History.Count())
+                    if (i < ChatViewModel.Current.History.Count())
                     {
                         // skip till new entries
-                        break;
+                        continue;
                     }
 
-                    msg.Messages[i].ClientMessages = ChatViewModel.History;
-                    ChatViewModel.History.Add(msg.Messages[i]);
+                    msg.Messages[i].ClientMessages = ChatViewModel.Current.History;
+                    ChatViewModel.Current.MessagesSum = msg.Amount;
+                    ChatViewModel.Current.History.Add(msg.Messages[i]);
                 }
-                List<ConvoMessage> sorted = ChatViewModel.History.OrderBy(o=>o.Id).ToList();
-                ChatViewModel.History.Clear();
-                ChatViewModel.History.AddRange(sorted);
+                List<ConvoMessage> sorted = ChatViewModel.Current.History.OrderBy(o=>o.Id).ToList();
+                ChatViewModel.Current.History.Clear();
+                ChatViewModel.Current.History.AddRange(sorted);
+                msg.ConvoMessage.ClientMessages = ChatViewModel.Current.History;
+                ChatViewModel.Current.UpdateForNewMessages();
                 break;
             case CommandType.NewSingleMessage:
-                msg.ConvoMessage.ClientMessages = ChatViewModel.History;
-                ChatViewModel.History.Add(msg.ConvoMessage);
-                ChatViewModel.CheckScroll();
+                msg.ConvoMessage.ClientMessages = ChatViewModel.Current.History;
+                ChatViewModel.Current.History.Add(msg.ConvoMessage);
+                ChatViewModel.Current.CheckScroll();
+                ChatViewModel.Current.UpdateForNewMessages();
+                Notifier.ShowMessage(msg.ConvoMessage);
                 break;
             
         }

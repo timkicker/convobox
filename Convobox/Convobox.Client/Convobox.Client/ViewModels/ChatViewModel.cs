@@ -1,5 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Reactive;
 using System.Reactive.Linq;
 using System.Threading;
@@ -9,32 +10,47 @@ using Avalonia.Controls;
 using Avalonia.Threading;
 using Convobox.Client.Models;
 using Convobox.Server;
+using Material.Icons;
 using ReactiveUI;
+using SharedDefinitions;
 
 namespace Convobox.Client.ViewModels;
 
 public class ChatViewModel : ViewModelBase
 {
-    private static ObservableCollection<ConvoMessage> _history = new ObservableCollection<ConvoMessage>();
+    private ObservableCollection<ConvoMessage> _history = new ObservableCollection<ConvoMessage>();
     private string _enteredText;
-    private static int _messagesBefore;
-    private static Vector _scrollMax;
-    private static Vector _scrollMaxOld;
-    private static Vector _scrollCurrent;
+    private int _messagesBefore;
+    private Vector _scrollMax;
+    private Vector _scrollMaxOld;
+    private Vector _scrollCurrent;
+    private int _messagesSum;
 
     public ChatViewModel()
     {
         SendButtonCommand = ReactiveCommand.CreateFromObservable(SendCommand);
+        RequestMoreMessagesCommand = ReactiveCommand.CreateFromObservable(RequestMoreMessages);
+        Current = this;
+        Title = "Chat";
+        Icon = MaterialIconKind.Chat;
     }
     #region commands
     
     public ReactiveCommand<Unit,Unit> SendButtonCommand { get; }
+    public ReactiveCommand<Unit,Unit> RequestMoreMessagesCommand { get; }
 
     #endregion
 
     #region methods
 
-    public static void CheckScroll()
+    public void UpdateForNewMessages()
+    {
+        OnPropertyChanged(nameof(ShowGetButton));
+        OnPropertyChanged(nameof(History));
+        OnPropertyChanged(nameof(ConvoMessage.Space));
+    }
+
+    public void CheckScroll()
     {
         var currentMax = ChatScrollViewer.ScrollBarMaximum;
         
@@ -66,7 +82,7 @@ public class ChatViewModel : ViewModelBase
         return;
     }
     
-    private static async Task GetScrollbarLength()
+    private async Task GetScrollbarLength()
     {
         _scrollCurrent = ChatScrollViewer.Offset;
         return;
@@ -76,11 +92,16 @@ public class ChatViewModel : ViewModelBase
     {
         return Observable.Start(() =>
         {
-            if (EnteredText.Length > 0)
+            if (string.IsNullOrEmpty(EnteredText))
+                return;
+            
+            if (EnteredText.Length > 0 && !EnteredText.All(char.IsWhiteSpace))
             {
+                
+                EnteredText = EnteredText.TrimEnd('\r', '\n');
                 var message = new ConvoMessage()
                 {
-                    Data = EnteredText,
+                    Data = EnteredText.TrimStart(),
                 };
 
                 var commandMessage = new CommandMessge(CommandType.SendMessage)
@@ -90,6 +111,24 @@ public class ChatViewModel : ViewModelBase
                 
                 ClientConversationManager.Send(commandMessage);
                 EnteredText = "";
+            }
+            
+        });
+    }
+    
+    private IObservable<Unit> RequestMoreMessages()
+    {
+        return Observable.Start(() =>
+        {
+            if (ShowGetButton)
+            {
+                var msg = new CommandMessge()
+                {
+                    Type = CommandType.MessagesReq,
+                    Amount = Definition.MessageGetDefault + History.Count
+                };
+                
+                ClientConversationManager.Send(msg);
             }
             
         });
@@ -109,12 +148,38 @@ public class ChatViewModel : ViewModelBase
         }
     }
 
-    public static ObservableCollection<ConvoMessage> History
+    public ObservableCollection<ConvoMessage> History
     {
         get => _history;
         set => _history = value;
     }
+
+    public bool ShowGetButton
+    {
+        get
+        {
+            if (History.Count >= Definition.MessageGetDefault)
+            {
+                if (MessagesSum == 0 || MessagesSum > History.Count)
+                {
+                    return true;
+                }
+
+                return false;
+            }
+                
+            else return false;
+        }
+    }
+
+    public int MessagesSum
+    {
+        get => _messagesSum;
+        set => _messagesSum = value;
+    }
     
+    public static ChatViewModel Current { get; set; }
+
     // for autoscroll purpose
     public static ScrollViewer ChatScrollViewer { get; set; }
     

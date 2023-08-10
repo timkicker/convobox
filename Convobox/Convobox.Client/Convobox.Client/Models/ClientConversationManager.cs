@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Threading;
 using Convobox.Server;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Convobox.Client.Models;
 
@@ -21,6 +22,7 @@ public static class ClientConversationManager
     private static DateTime _lastCommandReceivedTime;
     private static CancellationTokenSource _cancellationTokenSource;
     private static Thread _receiveThread;
+    private static Thread _connectionThread;
     
     public static bool Register(string username, string password)
     {
@@ -72,7 +74,14 @@ public static class ClientConversationManager
 
     public static void Send(CommandMessge msg)
     {
-        _stream.Write(msg.Serialize());
+        try
+        {
+            _stream.Write(msg.Serialize());
+        }
+        catch (Exception e)
+        {
+            NavigationStore.InternLogger.Log("Conversation","Could not send message");
+        }
     }
     
     public static void CloseConnection()
@@ -107,6 +116,8 @@ public static class ClientConversationManager
             _cancellationTokenSource = new CancellationTokenSource();
             _receiveThread = new Thread(ReceiveThread);
             _receiveThread.Start(_cancellationTokenSource.Token);
+            _connectionThread = new Thread(ConnectionCheckThread);
+            _connectionThread.Start(_cancellationTokenSource.Token);
             
             _lastCommandReceivedTime = DateTime.Now;
             return _isConnected = true;
@@ -121,6 +132,28 @@ public static class ClientConversationManager
     
     #region threads
 
+    private static void ConnectionCheckThread(System.Object obj)
+    {
+        CancellationToken token = (CancellationToken)obj;
+        while (!token.IsCancellationRequested)
+        {
+            var timeSinceLatestContact = DateTime.Now - _lastCommandReceivedTime;
+
+            if (timeSinceLatestContact.TotalSeconds > 20)
+            {
+                CloseConnection();
+                NavigationStore.BackToLogin("Connection timeout");
+            }
+            
+            if (timeSinceLatestContact.TotalSeconds > 10)
+            {
+                Send(new CommandMessge(){Type = CommandType.EchoReq});
+            }
+            
+        }
+    }
+    
+
     private static void ReceiveThread(System.Object obj)
     {
         CancellationToken token = (CancellationToken)obj;
@@ -129,7 +162,7 @@ public static class ClientConversationManager
 
             if (_client.Available > 0)
             {
-                byte[] buffer = new byte[_client.ReceiveBufferSize];
+                byte[] buffer = new byte[_client.Available];
                 int byte_count = _stream.Read(buffer, 0, buffer.Length);
                 if (byte_count == 0)
                 {
@@ -139,8 +172,15 @@ public static class ClientConversationManager
                 var bytesWanted = buffer.Skip(0).Take(byte_count).ToArray();            
             
                 LastCommandReceivedTime = DateTime.Now;
-                var receivedMessage = CommandMessge.Deserialize(bytesWanted);
-                ClientMessageValidator.Validate((receivedMessage));
+                try
+                {
+                    var receivedMessage = CommandMessge.Deserialize(bytesWanted);
+                    ClientMessageValidator.Validate((receivedMessage));
+                }
+                catch (Exception e)
+                {
+
+                }
             }
         }
         

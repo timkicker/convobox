@@ -1,9 +1,11 @@
 using System.Text;
-using System.Text.Json;
 using MemoryPack;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
+
 namespace Convobox.Server;
 
-[MemoryPackable]
+
 public partial class CommandMessge
 {
     private CommandType _type;
@@ -33,7 +35,7 @@ public partial class CommandMessge
     public byte[] Serialize()
     {
         //return MemoryPackSerializer.Serialize(this);
-        string jsonString = JsonSerializer.Serialize(this);
+        string jsonString = JsonConvert.SerializeObject(this);
         return Encoding.UTF8.GetBytes(jsonString);
     }
 
@@ -41,7 +43,7 @@ public partial class CommandMessge
     {
         //return MemoryPackSerializer.Deserialize<CommandMessge>(messageBytes);
         string jsonString = Encoding.UTF8.GetString(messageBytes);
-        return JsonSerializer.Deserialize<CommandMessge>(jsonString);
+        return JsonConvert.DeserializeObject<CommandMessge>(jsonString);
     }
 
     public List<ConvoMessage> Messages

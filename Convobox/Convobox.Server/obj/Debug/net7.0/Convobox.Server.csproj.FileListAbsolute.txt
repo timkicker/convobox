@@ -44,3 +44,6 @@
 /home/tim/Repo/convobox/Convobox/Convobox.Server/obj/Debug/net7.0/ref/Convobox.Server.dll
 /home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Dockerfile
 /home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/convobase.sqlite
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/SharedDefinitions.dll
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/SharedDefinitions.pdb
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Newtonsoft.Json.dll

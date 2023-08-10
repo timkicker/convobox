@@ -5,14 +5,21 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Convobox.Client.Views.ChatView"
              x:CompileBindings="False"
+             xmlns:cv="clr-namespace:Convobox.Client.Converters"
              xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             Loaded="Control_OnLoaded"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
     
     <UserControl.Styles>
         <Style Selector="TextBlock.h1">
-            
         </Style>
     </UserControl.Styles>
+    
+    <UserControl.Resources>
+        <cv:ColorConverter x:Key="ColorConverter"/>
+        <cv:ThicknessConverter x:Key="ThicknessConverter"/>
+        <cv:ThicknessTestConverter x:Key="ThicknessTestConverter"/>
+    </UserControl.Resources>
     
     
     <DockPanel LastChildFill="True">
@@ -21,7 +28,7 @@
                 <ColumnDefinition Width="*"></ColumnDefinition>
                 <ColumnDefinition Width="50"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <TextBox Classes="Floating" Margin="10 0 0 0 " AcceptsReturn="True" MaxHeight="100" TextWrapping="Wrap" Text="{Binding EnteredText}"></TextBox>
+            <TextBox KeyDown="InputElement_OnKeyDown" KeyUp="InputElement_OnKeyUp" Classes="Floating" Margin="10 0 0 0 " AcceptsReturn="True" MaxHeight="100" TextWrapping="Wrap" Text="{Binding EnteredText}"></TextBox>
             <Button Grid.Column="1" Margin="6" Classes="Flat" Command="{Binding SendButtonCommand}">
             <materialIcons:MaterialIcon
                 Width="20" Height="20"
@@ -30,24 +37,42 @@
             </Button>
         </Grid>
         <ScrollViewer Margin="20" x:Name="ChatScrollViewer">
-            <ItemsRepeater ItemsSource="{Binding History}" x:Name="ChatItemsRepeater">
-                <ItemsRepeater.ItemTemplate>
-                    <DataTemplate>
-                        <Grid MinHeight="30">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="80"></ColumnDefinition>
-                                <ColumnDefinition></ColumnDefinition>
-                                <ColumnDefinition Width="80"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
+            <DockPanel LastChildFill="True">
+                <Button DockPanel.Dock="Top" Content="Load more" Margin="10 10 10 20" MaxWidth="200" MaxHeight="50" IsVisible="{Binding ShowGetButton}" Command="{Binding RequestMoreMessagesCommand}"></Button>
+                <ItemsRepeater ItemsSource="{Binding History}" x:Name="ChatItemsRepeater" DockPanel.Dock="Bottom">
+                    <ItemsRepeater.ItemTemplate >
+                        <DataTemplate>
+                            <Grid Margin="0 0 15 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition Width="80"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
                             
-                            <TextBlock Text="{Binding UsernameDisplay}" ></TextBlock>
-                            <TextBlock Grid.Column="1" Text="{Binding Data}" ></TextBlock>
-                            <TextBlock  Grid.Column="2" Text="{Binding DateDisplay}" Foreground="DarkGray"></TextBlock>
+                                <TextBlock 
+                                    HorizontalAlignment="Right" 
+                                    Text="{Binding UsernameDisplay}" 
+                                    Foreground="{Binding User.Color, Converter={StaticResource ColorConverter}}" 
+                                    Margin="{Binding Space, Converter={StaticResource ThicknessConverter}}"  ></TextBlock>
+                                
+                                <SelectableTextBlock 
+                                    FontFamily="{Binding ElementName=DateBlock, Path=FontFamily, Mode=OneWay}"
+                                    Margin="{Binding Space, Converter={StaticResource ThicknessConverter}}"  
+                                    TextWrapping="Wrap" 
+                                    Grid.Column="1" Text="{Binding Data}" ></SelectableTextBlock>
+                                
+                                <TextBlock  Grid.Column="2" 
+                                            x:Name="DateBlock"
+                                            Text="{Binding DateDisplay}"
+                                            HorizontalAlignment="Right"
+                                            Foreground="DarkGray" 
+                                            Margin="{Binding Space, Converter={StaticResource ThicknessConverter}}"  ></TextBlock>
                             
-                        </Grid>
-                    </DataTemplate>
-                </ItemsRepeater.ItemTemplate>
-            </ItemsRepeater>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsRepeater.ItemTemplate>
+                </ItemsRepeater>
+            </DockPanel>
         </ScrollViewer>
     </DockPanel>
 </UserControl>

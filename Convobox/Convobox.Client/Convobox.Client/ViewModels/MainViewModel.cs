@@ -20,6 +20,8 @@ public class MainViewModel : ViewModelBase
         // register vm/v
         Locator.CurrentMutable.Register(() => new LoginView(), typeof(IViewFor<LoginViewModel>));
         Locator.CurrentMutable.Register(() => new ChatView(), typeof(IViewFor<ChatViewModel>));
+        Locator.CurrentMutable.Register(() => new DashboardView(), typeof(IViewFor<DashboardViewModel>));
+        Locator.CurrentMutable.Register(() => new SettingsView(), typeof(IViewFor<SettingsViewModel>));
         
         
     }
