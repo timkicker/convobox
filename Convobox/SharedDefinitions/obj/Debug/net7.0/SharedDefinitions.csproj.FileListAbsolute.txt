@@ -1,0 +1,14 @@
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/bin/Debug/net7.0/SharedDefinitions.deps.json
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/bin/Debug/net7.0/SharedDefinitions.dll
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/bin/Debug/net7.0/SharedDefinitions.pdb
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/bin/Debug/net7.0/Avalonia.Base.dll
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/obj/Debug/net7.0/SharedDefinitions.csproj.AssemblyReference.cache
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/obj/Debug/net7.0/SharedDefinitions.GeneratedMSBuildEditorConfig.editorconfig
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/obj/Debug/net7.0/SharedDefinitions.AssemblyInfoInputs.cache
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/obj/Debug/net7.0/SharedDefinitions.AssemblyInfo.cs
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/obj/Debug/net7.0/SharedDefinitions.csproj.CoreCompileInputs.cache
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/obj/Debug/net7.0/SharedDefinitions.csproj.CopyComplete
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/obj/Debug/net7.0/SharedDefinitions.dll
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/obj/Debug/net7.0/refint/SharedDefinitions.dll
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/obj/Debug/net7.0/SharedDefinitions.pdb
+/home/tim/Repo/convobox/Convobox/SharedDefinitions/obj/Debug/net7.0/ref/SharedDefinitions.dll
