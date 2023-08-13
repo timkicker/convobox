@@ -12,9 +12,9 @@ public class MainViewModel : ViewModelBase
     private ViewModelBase _currentViewModel;
     
     
-    public MainViewModel()
+    public MainViewModel(LoginViewModel login)
     {
-        CurrentViewModel = new LoginViewModel();
+        CurrentViewModel = login;
         NavigationStore.MainWindowViewModel = this;
         
         // register vm/v

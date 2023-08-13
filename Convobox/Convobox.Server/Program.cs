@@ -6,6 +6,7 @@ namespace Convobox.Server
     {
         static void Main(string[] args)
         {
+            CryptographyManager.Init();
             DatabaseManager.SetDatabaseLocation();
             ServerConversationManager.Start();
         }

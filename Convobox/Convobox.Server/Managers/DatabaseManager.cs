@@ -160,21 +160,19 @@ public class DatabaseManager
                 connection.Open();
 
                 var command = connection.CreateCommand();
-                command.CommandText = $"select user.name from user where name=@name and user.password=@password;";
+                command.CommandText = $"select user.password,user.salt from user where name=@name";
                 
                 command.Parameters.Add("@name", SqliteType.Text);
                 command.Parameters["@name"].Value = userToCheck.Name;
-                
-                command.Parameters.Add("@password", SqliteType.Text);
-                command.Parameters["@password"].Value = userToCheck.Password;
 
                 using (var reader = command.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        if (reader.GetString(0) == userToCheck.Name)
-                            return true;
-                        else return false;
+                        string hashedPassword = reader.GetString(0);
+                        string salt = reader.GetString(1);
+
+                        return CryptographyManager.ValidatePassword(userToCheck.Password, salt, hashedPassword);
                     }
                 }
 
@@ -203,13 +201,19 @@ public class DatabaseManager
                 connection.Open();
 
                 var command = connection.CreateCommand();
-                command.CommandText = $"insert into user (name,password,creation_date,last_online_date,admin,color) values(@name,@password,@creation,@creation,0,@color);";
+                command.CommandText = $"insert into user (name,password,salt,creation_date,last_online_date,admin,color) values(@name,@password,@salt,@creation,@creation,0,@color);";
                 
                 command.Parameters.Add("@name", SqliteType.Text);
                 command.Parameters["@name"].Value = userToCreate.Name;
+
+                var salt = CryptographyManager.GenerateSalt();
+                var hashedPassword = CryptographyManager.HashPassword(userToCreate.Password, salt);
                 
                 command.Parameters.Add("@password", SqliteType.Text);
-                command.Parameters["@password"].Value = userToCreate.Password;
+                command.Parameters["@password"].Value = hashedPassword;
+                
+                command.Parameters.Add("@salt", SqliteType.Text);
+                command.Parameters["@salt"].Value = salt;
                 
                 command.Parameters.Add("@creation", SqliteType.Text);
                 command.Parameters["@creation"].Value = ParseToSQLiteDateTime(DateTime.Now);

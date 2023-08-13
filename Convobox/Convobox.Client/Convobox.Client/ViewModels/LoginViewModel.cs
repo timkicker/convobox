@@ -1,6 +1,7 @@
 using System;
 using System.Reactive;
 using System.Reactive.Linq;
+using System.Security;
 using Avalonia.Media;
 using Avalonia.Media.TextFormatting.Unicode;
 using Convobox.Client.Models;
@@ -27,9 +28,7 @@ public class LoginViewModel : ViewModelBase
         _address = "localhost";
         TryLoginCommand = ReactiveCommand.CreateFromObservable(LoginButtonCommand);
         TryRegisterCommand = ReactiveCommand.CreateFromObservable(RegisterButtonCommand);
-
-        Username = "admin";
-        Password = Username;
+        
     }
     
     #region commands
@@ -167,6 +166,7 @@ public class LoginViewModel : ViewModelBase
                 // switch view
                 var dash = new DashboardViewModel();
                 NavigationStore.SwitchMainTo(dash);
+                
             }
             else
             {
@@ -237,6 +237,14 @@ public class LoginViewModel : ViewModelBase
         {
             _username = this.RaiseAndSetIfChanged(ref _username, value);
             CheckButtonVisibility();
+            try
+            {
+                Settings.Current.Username = value;
+            }
+            catch (Exception e)
+            {
+
+            }
         }
     }
 
@@ -247,6 +255,14 @@ public class LoginViewModel : ViewModelBase
         {
             _password = this.RaiseAndSetIfChanged(ref _password, value);
             CheckButtonVisibility();
+            try
+            {
+                Settings.Current.SetPassword(value);
+            }
+            catch (Exception e)
+            {
+
+            }
         }
     }
 

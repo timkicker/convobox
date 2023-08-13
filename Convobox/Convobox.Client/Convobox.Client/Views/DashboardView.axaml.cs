@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Convobox.Client.Models;
 using Convobox.Client.ViewModels;
 
 namespace Convobox.Client.Views;
@@ -38,4 +39,6 @@ public partial class DashboardView : UserControl
     {
         LeftDrawer.SwitchLeftDrawerOpened();
     }
+
+
 }

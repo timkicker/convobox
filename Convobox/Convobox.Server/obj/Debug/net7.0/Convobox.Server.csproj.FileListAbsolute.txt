@@ -47,3 +47,12 @@
 /home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/SharedDefinitions.dll
 /home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/SharedDefinitions.pdb
 /home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Newtonsoft.Json.dll
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Microsoft.Extensions.Configuration.dll
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Microsoft.Extensions.Configuration.Abstractions.dll
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Microsoft.Extensions.Configuration.FileExtensions.dll
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Microsoft.Extensions.Configuration.Json.dll
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Microsoft.Extensions.Configuration.UserSecrets.dll
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Microsoft.Extensions.FileProviders.Abstractions.dll
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Microsoft.Extensions.FileProviders.Physical.dll
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Microsoft.Extensions.FileSystemGlobbing.dll
+/home/tim/Repo/convobox/Convobox/Convobox.Server/bin/Debug/net7.0/Microsoft.Extensions.Primitives.dll

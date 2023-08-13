@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using System.Net;
+using System.Net.Security;
 using System.Net.Sockets;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -17,7 +18,7 @@ public static class ClientConversationManager
     private static string _instance;
     private static bool _isLoggedIn;
     private static TcpClient _client;
-    private static NetworkStream _stream;
+    private static SslStream _stream;
     private static IPAddress _serverAdress;
     private static DateTime _lastCommandReceivedTime;
     private static CancellationTokenSource _cancellationTokenSource;
@@ -110,7 +111,15 @@ public static class ClientConversationManager
             _port = Convert.ToInt32(port);
             _client = new TcpClient();
             _client.Connect(_serverAdress, _port);
-            _stream = _client.GetStream();
+            
+            _stream = new SslStream(
+                _client.GetStream(),
+                false,
+                new RemoteCertificateValidationCallback (ClientCryptoManager.ValidateServerCertificate),
+                null
+            );
+            
+            _stream.AuthenticateAsClient("convobox");
 
             // start receive thread
             _cancellationTokenSource = new CancellationTokenSource();
@@ -129,6 +138,8 @@ public static class ClientConversationManager
         }
         
     }
+    
+    
     
     #region threads
 
@@ -153,7 +164,6 @@ public static class ClientConversationManager
         }
     }
     
-
     private static void ReceiveThread(System.Object obj)
     {
         CancellationToken token = (CancellationToken)obj;
@@ -162,14 +172,15 @@ public static class ClientConversationManager
 
             if (_client.Available > 0)
             {
-                byte[] buffer = new byte[_client.Available];
+                byte[] buffer = new byte[_client.ReceiveBufferSize];
                 int byte_count = _stream.Read(buffer, 0, buffer.Length);
+
                 if (byte_count == 0)
                 {
                     break;
                 }
-
-                var bytesWanted = buffer.Skip(0).Take(byte_count).ToArray();            
+                
+                var bytesWanted = buffer.Skip(0).Take(byte_count).ToArray();         
             
                 LastCommandReceivedTime = DateTime.Now;
                 try

@@ -1,5 +1,7 @@
 using System.Net;
+using System.Net.Security;
 using System.Net.Sockets;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 
 namespace Convobox.Server;
@@ -10,6 +12,7 @@ public static class ServerConversationManager
     const string domain = "localhost";
     static readonly object _lock = new object();
     static readonly Dictionary<int, TcpClient> _clients = new Dictionary<int, TcpClient>();
+    static readonly Dictionary<TcpClient, SslStream> _sslStreams = new Dictionary<TcpClient, SslStream>();
     static readonly Dictionary<int, User> _clientAuth = new Dictionary<int, User>();
 
     public static bool Start()
@@ -32,14 +35,12 @@ public static class ServerConversationManager
 
     public static void SendMessage(CommandMessge msg, int clientId)
     {
-        TcpClient client;
-        lock (_lock) client = _clients[clientId];
-        NetworkStream stream = client.GetStream();
+        var stream = _sslStreams[_clients[clientId]];
         stream.Write(msg.Serialize());
     }
     public static void SendMessage(CommandMessge msg, TcpClient client)
     {
-        NetworkStream stream = client.GetStream();
+        var stream = _sslStreams[client];
         stream.Write(msg.Serialize());
     }
 
@@ -60,12 +61,15 @@ public static class ServerConversationManager
         int id = (int)o;
         
         lock (_lock) client = _clients[id];
+        var serverCertificate = CryptographyManager.GenerateSelfSignedCertificate("convobox", 365);
+        SslStream stream = new SslStream(client.GetStream(), false);
+        _sslStreams[client] = stream;
+        stream.AuthenticateAsServer(serverCertificate, clientCertificateRequired: false, checkCertificateRevocation: true);
 
         while (true)
         {
             try
             {
-                NetworkStream stream = client.GetStream();
                 byte[] buffer = new byte[client.ReceiveBufferSize];
                 int byte_count = stream.Read(buffer, 0, buffer.Length);
 

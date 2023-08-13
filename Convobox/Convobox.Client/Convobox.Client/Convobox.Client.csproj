@@ -40,8 +40,4 @@
       <ProjectReference Include="..\..\Convobox.Server\Convobox.Server.csproj" />
       <ProjectReference Include="..\..\SharedDefinitions\SharedDefinitions.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Interfaces\" />
-    </ItemGroup>
 </Project>

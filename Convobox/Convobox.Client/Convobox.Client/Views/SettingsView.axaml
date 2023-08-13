@@ -13,9 +13,10 @@
         <cv:ThicknessTestConverter x:Key="ThicknessTestConverter"/>
         <cv:ColorNameConverter x:Key="ColorNameConverter"/>
         <cv:ColorBrushConverter x:Key="ColorBrushConverter"/>
+        <cv:ThemeNameConverter x:Key="ThemeNameConverter"/>
     </UserControl.Resources>
     
-    <Grid MaxWidth="500" Margin="0 20 0 20">
+    <Grid MaxWidth="540" Margin="20">
         
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
@@ -48,12 +49,18 @@
             </ComboBox.ItemTemplate>
         </ComboBox>
         <TextBlock Grid.Row="1" Text="Theme" VerticalAlignment="Center" ></TextBlock>
-        <ComboBox Grid.Row="1"  Grid.Column="1" SelectedItem="{Binding SelectedTheme}" ItemsSource="{Binding Themes}" Classes="Filled"></ComboBox>
+        <ComboBox Grid.Row="1"  Grid.Column="1" SelectedItem="{Binding SelectedTheme}" ItemsSource="{Binding Themes}" Classes="Filled">
+            <ComboBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Path=. ,  Converter={StaticResource ThemeNameConverter}}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
         
         <TextBlock Grid.Row="2" Text="Notifications" VerticalAlignment="Center"></TextBlock>
-        <CheckBox Grid.Row="2" Grid.Column="1" ></CheckBox>
+        <CheckBox Grid.Row="2" Grid.Column="1" IsChecked="{Binding SelectedNotificationSettings}" ></CheckBox>
         
-        <Button Grid.Row="20" Grid.ColumnSpan="2" Content="Save"></Button>
+        <Button Grid.Row="20" Grid.ColumnSpan="2" Content="Save" Command="{Binding SettingsButtonCommand}" IsEnabled="{Binding SaveButtonEnabled}"></Button>
         
         
     </Grid>

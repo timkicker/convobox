@@ -36,7 +36,7 @@
             />
             </Button>
         </Grid>
-        <ScrollViewer Margin="20" x:Name="ChatScrollViewer">
+        <ScrollViewer Margin="20 0 20 5" x:Name="ChatScrollViewer">
             <DockPanel LastChildFill="True">
                 <Button DockPanel.Dock="Top" Content="Load more" Margin="10 10 10 20" MaxWidth="200" MaxHeight="50" IsVisible="{Binding ShowGetButton}" Command="{Binding RequestMoreMessagesCommand}"></Button>
                 <ItemsRepeater ItemsSource="{Binding History}" x:Name="ChatItemsRepeater" DockPanel.Dock="Bottom">

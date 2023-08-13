@@ -17,27 +17,35 @@
         <controls:NavigationDrawer.LeftDrawerContent>
           <ScrollViewer>
             <DockPanel LastChildFill="True" Margin="5">
+              <!--
               <TextBlock Classes="Headline6" Text="Navigation" HorizontalAlignment="Center" DockPanel.Dock="Top" />
+              
               <Separator DockPanel.Dock="Top"></Separator>
+              -->
               <TextBlock Text="V0.1" HorizontalAlignment="Center" DockPanel.Dock="Bottom" />
               <ItemsRepeater ItemsSource="{Binding UserViews}">
                 <ItemsRepeater.ItemTemplate>
                   <DataTemplate>
-                    <Button Click="Button_OnClick" Tag="{Binding Title}" Theme="{StaticResource FlatButton}" >
+                    <Grid MinHeight="40" Margin="5">
                       <Grid>
                         <Grid.ColumnDefinitions>
                           <ColumnDefinition Width="*"></ColumnDefinition>
-                          <ColumnDefinition Width="*"></ColumnDefinition>
+                          <ColumnDefinition Width="2*"></ColumnDefinition>
                         </Grid.ColumnDefinitions>
                         <materialIcons:MaterialIcon
-                          Width="15" Height="15"
+                          Width="20" Height="20"
                           Kind="{Binding Icon}"
                           Margin="0 2 5 0"
                           HorizontalAlignment="Right"
                           Grid.Column="0"/>
-                        <TextBlock Grid.Column="1" Text="{Binding Title}" HorizontalAlignment="Left" ></TextBlock>
+                        <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" ></TextBlock>
                       </Grid>
-                    </Button>
+                      <Button Click="Button_OnClick" Tag="{Binding Title}" Theme="{StaticResource FlatButton}" >
+                        
+                      </Button>
+                      
+                    </Grid>
+                   
                   </DataTemplate>
                 </ItemsRepeater.ItemTemplate>
               </ItemsRepeater>
@@ -45,31 +53,33 @@
           </ScrollViewer>
         </controls:NavigationDrawer.LeftDrawerContent>
     <DockPanel>
-      <Grid Margin="16" Height="56" DockPanel.Dock="Top">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="24" />
-          <ColumnDefinition Width="32" />
-          <ColumnDefinition Width="*" />
-          <ColumnDefinition Width="32" />
-          <ColumnDefinition Width="Auto" />
-        </Grid.ColumnDefinitions>
-        <ToggleButton Name="NavDrawerSwitch"
-                      IsChecked="{Binding ToggleButtonChecked}"
-                      Width="32" Height="32" Padding="4">
-          <avalonia:MaterialIcon Kind="Menu" Width="24" Height="24" />
-        </ToggleButton>
-        <TextBlock Grid.Column="2" Classes="Headline6" Text="{Binding SelectedView.Title}"
-                   VerticalAlignment="Center" />
-        <Menu Grid.Column="4" Height="32" Padding="0" Margin="0">
-          <MenuItem Height="32" Width="32" Header="{avalonia:MaterialIconExt DotsVertical, Size=24}" Command="{Binding LogoutButtonCommand}">
-            <MenuItem Header="Logout" >
-              <MenuItem.Icon>
-                <avalonia:MaterialIcon Kind="ExitRun" Width="24" Height="24" />
-              </MenuItem.Icon>
+      <controls:Card Margin="16 16 16 0" Height="56" DockPanel.Dock="Top">
+        <Grid >
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="24" />
+            <ColumnDefinition Width="32" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="32" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <ToggleButton Name="NavDrawerSwitch"
+                        IsChecked="{Binding ToggleButtonChecked}"
+                        Width="32" Height="32" Padding="4">
+            <avalonia:MaterialIcon Kind="Menu" Width="24" Height="24" />
+          </ToggleButton>
+          <TextBlock Grid.Column="2" Classes="Headline6" Text="{Binding SelectedView.Title}"
+                     VerticalAlignment="Center" />
+          <Menu Grid.Column="4" Height="32" Padding="0" Margin="0">
+            <MenuItem Height="32" Width="32" Header="{avalonia:MaterialIconExt DotsVertical, Size=24}" Command="{Binding LogoutButtonCommand}">
+              <MenuItem Header="Logout" >
+                <MenuItem.Icon>
+                  <avalonia:MaterialIcon Kind="ExitRun" Width="24" Height="24" />
+                </MenuItem.Icon>
+              </MenuItem>
             </MenuItem>
-          </MenuItem>
-        </Menu>
-      </Grid>
+          </Menu>
+        </Grid>
+      </controls:Card>
       
       <Border HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">

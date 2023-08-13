@@ -38,6 +38,8 @@ public class DashboardViewModel : ViewModelBase
         {
             ClientConversationManager.CloseConnection();
             NavigationStore.BackToLogin("Logged out");
+            Settings.Current = new Settings();
+            App.ThemeManager.SetDefaults();
         });
     }
 

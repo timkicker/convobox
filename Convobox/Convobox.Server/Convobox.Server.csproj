@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
@@ -8,7 +8,8 @@
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
         <Configurations>Debug;Release;Debug with testing data</Configurations>
         <Platforms>AnyCPU</Platforms>
-    </PropertyGroup>
+      <UserSecretsId>96c5fe0f-6986-423a-9eb7-5f3f6a109c48</UserSecretsId>
+  </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug with testing data' ">
       <DebugSymbols Condition=" '$(DebugSymbols)' == '' ">true</DebugSymbols>
@@ -24,6 +25,7 @@
     <ItemGroup>
       <PackageReference Include="MemoryPack" Version="1.9.16" />
       <PackageReference Include="Microsoft.Data.Sqlite" Version="7.0.9" />
+      <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
       <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
@@ -39,5 +41,6 @@
     <ItemGroup>
       <ProjectReference Include="..\SharedDefinitions\SharedDefinitions.csproj" />
     </ItemGroup>
+
 
 </Project>

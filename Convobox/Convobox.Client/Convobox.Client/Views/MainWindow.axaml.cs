@@ -1,3 +1,4 @@
+using System;
 using Avalonia;
 using Avalonia.Automation;
 using Avalonia.Controls;
@@ -12,12 +13,14 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
-        
+  
     }
 
     private void Window_OnClosing(object? sender, WindowClosingEventArgs e)
     {
         ClientConversationManager.CloseConnection();
-        Settings.Save();
+        Settings.TrySave();
     }
+
+
 }

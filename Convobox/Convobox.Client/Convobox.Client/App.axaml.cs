@@ -29,37 +29,46 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        var login = new LoginViewModel();
+        
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel()
+                DataContext = new MainViewModel(login)
             };
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel()
+                DataContext = new MainViewModel(login)
             };
         }
         
-        
+        Notifier.CreateManager();
 
+        // Settings
         ThemeManager.App = this;
-        ThemeManager.UpdateTheme();
-
         try
         {
             Settings.Load();
+            Settings.Current.LoadTheme();
+            Settings.Current.LoadPrimaryColor();
+            
             ThemeManager.SetTheme(Settings.Current.Theme);
             ThemeManager.SetPrimaryColor(Settings.Current.ColorTheme);
+            
+             login.Username = Settings.Current.Username;
+             login.Password = Settings.Current.GetPassword();
+
+             if (login.Username.Length > 0 && login.Password.Length > 0)
+                 login.TryLoginCommand.Execute();
         }
         catch (Exception e)
         {
-            
+            ThemeManager.UpdateTheme();
         }
-        
         
 
         NavigationStore.InternLogger.Log("Application", $"Startup");
@@ -79,6 +88,12 @@ public partial class App : Application
         public static Avalonia.Media.Color GetAvaloniaColor(System.Drawing.Color color)
         {
             return Avalonia.Media.Color.FromRgb(color.R, color.G, color.B);
+        }
+
+        public static void SetDefaults()
+        {
+            SetPrimaryColor(GetAvaloniaColor(Definition.Blue));
+            SetTheme(Theme.Dark);
         }
         
         
@@ -103,6 +118,7 @@ public partial class App : Application
             var theme = Theme.Create(CurrentTheme, CurrentPrimaryColor, secondaryColor);
             var themeBootstrap = App.LocateMaterialTheme<MaterialThemeBase>();
 
+            Settings.Current.Theme = CurrentTheme;
 
             Dispatcher.UIThread.Post(() => { themeBootstrap.CurrentTheme = theme; }, DispatcherPriority.Default);
 
