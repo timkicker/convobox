@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Convobox.Client.ViewModels;
 using Convobox.Client.Views;
 using Convobox.Server;
@@ -9,7 +10,7 @@ namespace Convobox.Client.Models;
 
 public static class ClientMessageValidator
 {
-    public static void Validate(CommandMessge msg)
+    public static async Task Validate(CommandMessge msg)
     {
         switch (msg.Type)
         {
@@ -52,9 +53,12 @@ public static class ClientMessageValidator
                 ChatViewModel.Current.History.Add(msg.ConvoMessage);
                 ChatViewModel.Current.CheckScroll();
                 ChatViewModel.Current.UpdateForNewMessages();
-                Notifier.ShowMessage(msg.ConvoMessage);
+                Notifier.ShowReceivedMessage(msg.ConvoMessage);
+                break;
+            case CommandType.GetServerInfoRep:
+                Settings.Current.ServerInfo = msg.ServerInfo;
                 break;
             
         }
-    }
+        }
 }

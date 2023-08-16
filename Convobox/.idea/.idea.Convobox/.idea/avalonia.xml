@@ -7,6 +7,7 @@
         <entry key="Convobox.Client/Convobox.Client/Views/ChatView.axaml" value="Convobox.Client/Convobox.Client.Browser/Convobox.Client.Browser.csproj" />
         <entry key="Convobox.Client/Convobox.Client/Views/ChatViewModel.axaml" value="Convobox.Client/Convobox.Client.Browser/Convobox.Client.Browser.csproj" />
         <entry key="Convobox.Client/Convobox.Client/Views/DashboardView.axaml" value="Convobox.Client/Convobox.Client.Browser/Convobox.Client.Browser.csproj" />
+        <entry key="Convobox.Client/Convobox.Client/Views/ImageDisplayView.axaml" value="Convobox.Client/Convobox.Client.Browser/Convobox.Client.Browser.csproj" />
         <entry key="Convobox.Client/Convobox.Client/Views/LoginView.axaml" value="Convobox.Client/Convobox.Client.Browser/Convobox.Client.Browser.csproj" />
         <entry key="Convobox.Client/Convobox.Client/Views/MainView.axaml" value="Convobox.Client/Convobox.Client.Browser/Convobox.Client.Browser.csproj" />
         <entry key="Convobox.Client/Convobox.Client/Views/MainWindow.axaml" value="Convobox.Client/Convobox.Client.Browser/Convobox.Client.Browser.csproj" />

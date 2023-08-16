@@ -4,7 +4,7 @@ namespace Convobox.Server;
 
 public static class ServerMessageController
 {
-    public static void Validate(CommandMessge commandMsg,int clientId)
+    public static async Task Validate(CommandMessge commandMsg,int clientId)
     {
         switch (commandMsg.Type)
         {
@@ -87,7 +87,7 @@ public static class ServerMessageController
                 
                 Console.WriteLine($"[INFO][Message] {commandMsg.UserData.Name} under {clientId} sent: {commandMsg.ConvoMessage.Data} ");
                 commandMsg.ConvoMessage = DatabaseManager.InsertMessage(commandMsg.ConvoMessage);
-                
+                commandMsg.ConvoMessage.Base64File = "";
                 // overwrite user so clients do not receiver the other user's password
                 commandMsg.UserData = new User() { Name = user.Name , Id = user.Id, Creation = user.Creation, LastOnline = user.LastOnline, Color = user.Color};
                 
@@ -108,6 +108,17 @@ public static class ServerMessageController
                 };
                 ServerConversationManager.SendNewMessageToAllConnected(echoRep);
                 break;
+            case CommandType.GetServerInfoReq:
+                var serverInfoRep = new CommandMessge()
+                {
+                    Type = CommandType.GetServerInfoRep,
+                    ServerInfo = ServerConversationManager.ServerInfo
+                };
+                ServerConversationManager.SendMessage(serverInfoRep,clientId);
+                break;
+            
+                
+                
                 
         }
     }

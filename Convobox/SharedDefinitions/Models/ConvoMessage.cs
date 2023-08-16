@@ -1,6 +1,8 @@
-using MemoryPack;
+
 using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using Microsoft.Extensions.FileProviders;
 
 namespace Convobox.Server;
 
@@ -11,11 +13,39 @@ public partial class ConvoMessage
     private string _data;
     private User _user = new User();
     private DateTime _creation;
+    private string _base64File;
+    private string _uniqueFileName;
+    private string _fileName;
+    private string _localFilePath;
     
     // for client display
     public ObservableCollection<ConvoMessage> ClientMessages { get; set; } = new ObservableCollection<ConvoMessage>();
 
+    public bool SetFile(byte[] fileBytes)
+    {
+        if (fileBytes.Length <= 0)
+            return false;
+        
+        try
+        {
+            Base64File = Convert.ToBase64String(fileBytes);
+            return true;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
+    }
 
+    public byte[] GetFile()
+    {
+        if (string.IsNullOrEmpty(Base64File))
+        {
+            return null;
+        }
+        else return Convert.FromBase64String(Base64File);
+    }
+    
     public string UserSymbol
     {
         get
@@ -41,6 +71,9 @@ public partial class ConvoMessage
                     string lastUsername = ClientMessages[index - 1].User.Name;
                     string username = this.User.Name;
 
+                    if (this.Creation.Day != ClientMessages[index - 1].Creation.Day)
+                        return username;
+                    
                     if ((username == lastUsername) && ClientMessages[index - 1].DateDisplay.Length > this.DateDisplay.Length)
                     {
                         return username;
@@ -71,6 +104,30 @@ public partial class ConvoMessage
         }
     }
 
+    public bool ShowGeneralFileDisplay
+    {
+        get
+        {
+            return !IsImage && FileAttached;
+        }
+    }
+
+    public bool IsImage
+    {
+        get
+        {
+            if (Path.GetExtension(FileName) == ".webp")
+                return true;
+            return false;
+        }
+    }
+    
+    public string LocalFilePath
+    {
+        get => _localFilePath;
+        set => _localFilePath = value;
+    }
+
     public int Space
     {
         get
@@ -83,6 +140,14 @@ public partial class ConvoMessage
             return 0;
         }
     }
+
+    public string FileName
+    {
+        get => _fileName;
+        set => _fileName = value;
+    }
+
+    
     
     public string DateDisplay
     {
@@ -114,7 +179,13 @@ public partial class ConvoMessage
             
         }
     }
-    
+
+    public string UniqueFileName
+    {
+        get => _uniqueFileName;
+        set => _uniqueFileName = value;
+    }
+
     public int Id
     {
         get => _id;
@@ -133,11 +204,42 @@ public partial class ConvoMessage
         set => _user = value ;
     }
 
+    public string Base64File
+    {
+        get => _base64File;
+        set => _base64File = value ;
+    }
+
     public DateTime Creation
     {
         get => _creation;
         set => _creation = value;
     }
 
+    public bool HasText
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(Data) && Data != "11010100100110001001101010110101")
+            {
+                return false;
+            }
+            else return true;
+        }
+    }
+  
+    
+    public bool FileAttached
+    {
+        get
+        {
+            if (!string.IsNullOrEmpty(FileName) && !string.IsNullOrEmpty(UniqueFileName))
+            {
+                return true;
+            }
+
+            return false;
+        }
+    }
     
 }

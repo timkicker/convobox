@@ -1,6 +1,5 @@
 using System.Drawing;
 using System.Runtime.InteropServices.JavaScript;
-using MemoryPack;
 
 namespace Convobox.Server;
 
@@ -8,15 +7,14 @@ namespace Convobox.Server;
 public partial class User
 {
 
-    private Color color;
+    private System.Drawing.Color color;
     private int _id;
     private string _name;
     private string _password;
     private DateTime _creation;
     private DateTime _lastOnline;
     private bool _admin;
-
-    [MemoryPackConstructor]
+    
     public User()
     {
         
@@ -64,7 +62,7 @@ public partial class User
         set => _lastOnline = value;
     }
 
-    public Color Color
+    public System.Drawing.Color Color
     {
         get => color;
         set => color = value;

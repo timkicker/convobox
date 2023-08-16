@@ -10,7 +10,9 @@ namespace Convobox.Client;
 
 public class NavigationStore
 {
+    private static Avalonia.Controls.TopLevel _topLevel;
     private static MainViewModel _mainWindowViewModel;
+    private static DashboardViewModel _dashboard;
     
     public static void SwitchMainTo(ViewModelBase viewModel)
     {
@@ -32,6 +34,19 @@ public class NavigationStore
     {
         get => _mainWindowViewModel;
         set => _mainWindowViewModel = value ?? throw new ArgumentNullException(nameof(value));
+    }
+    
+    public static TopLevel TopLevel
+    {
+        get { return _topLevel; }
+
+        set { _topLevel = value; }
+    }
+
+    public static DashboardViewModel Dashboard
+    {
+        get => _dashboard;
+        set => _dashboard = value;
     }
 
     public static IPlatformSettings Settings { get; set; }

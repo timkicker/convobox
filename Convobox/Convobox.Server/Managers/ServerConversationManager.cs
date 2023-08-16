@@ -14,6 +14,7 @@ public static class ServerConversationManager
     static readonly Dictionary<int, TcpClient> _clients = new Dictionary<int, TcpClient>();
     static readonly Dictionary<TcpClient, SslStream> _sslStreams = new Dictionary<TcpClient, SslStream>();
     static readonly Dictionary<int, User> _clientAuth = new Dictionary<int, User>();
+    private static ServerInfo _serverInfo;
 
     public static bool Start()
     {
@@ -98,6 +99,12 @@ public static class ServerConversationManager
     public static Dictionary<int, TcpClient> Clients => _clients;
 
     public static Dictionary<int, User> ClientAuth => _clientAuth;
+
+    public static ServerInfo ServerInfo
+    {
+        get => _serverInfo;
+        set => _serverInfo = value ?? throw new ArgumentNullException(nameof(value));
+    }
 
     public static object Lock => _lock;
 }

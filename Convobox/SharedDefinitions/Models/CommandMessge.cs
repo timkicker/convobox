@@ -1,5 +1,5 @@
 using System.Text;
-using MemoryPack;
+
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -14,11 +14,11 @@ public partial class CommandMessge
     private ConvoMessage _convoMessage;
     private int _amount;
     private List<ConvoMessage> _messages;
-
+    private ServerInfo _serverInfo;
     
-    [MemoryPackConstructor]
     public CommandMessge()
     {
+        _serverInfo = new ServerInfo();
         _messages = new List<ConvoMessage>();
         _type = CommandType.Error;
         _userData = new User();
@@ -50,6 +50,12 @@ public partial class CommandMessge
     {
         get => _messages;
         set => _messages = value ;
+    }
+
+    public ServerInfo ServerInfo
+    {
+        get => _serverInfo;
+        set => _serverInfo = value;
     }
 
     public CommandType Type
@@ -87,12 +93,13 @@ public enum CommandType
     EchoReq,
     MessagesReq,
     SendMessage,
-    
+    GetServerInfoReq,
     
     LoginError,
     LoginSuccess,
     RegisterError,
     RegisterSuccess,
+    GetServerInfoRep,
     GetMessagesRep,
     EchoRep,
     NewSingleMessage,

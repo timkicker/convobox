@@ -3,10 +3,12 @@ using System.Drawing;
 using System.IO;
 using System.Net;
 using Convobox.Client.Interfaces;
+using Convobox.Server;
 using Material.Colors;
 using Material.Styles.Themes;
 using Material.Styles.Themes.Base;
 using Newtonsoft.Json;
+using SharedDefinitions;
 
 namespace Convobox.Client.Models;
 
@@ -20,9 +22,11 @@ public class Settings
     private bool _notifications;
     private bool _notifyOnlyMention;
     private IClientCryptographyManager _cryptoManager;
+    private ServerInfo _serverInfo;
     
     public Settings()
     {
+        _serverInfo = new ServerInfo();
         _cryptoManager = new ClientCryptoManager();
         Notifications = true;
         NotifyOnlyMention = false;
@@ -58,20 +62,14 @@ public class Settings
 
             string path;
             
-            if (OperatingSystem.IsWindows())
+            if (OperatingSystem.IsWindows() || OperatingSystem.IsLinux() || OperatingSystem.IsMacOS())
             {
-                path =  Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\convobox-settings.js";
+                path = PlatformInformation.GetApplicationSettingsPath();
             }
-            else if (OperatingSystem.IsLinux())
-            {
-                path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/convobox-settings.js";
-            }
+            
             else throw new Exception("settings not supported");
 
-            if (!File.Exists(path))
-            {
-                File.Create(path);
-            }
+            
             
             return path;
         }
@@ -93,6 +91,12 @@ public class Settings
     {
         get => _notifications;
         set => _notifications = value;
+    }
+
+    public ServerInfo ServerInfo
+    {
+        get => _serverInfo;
+        set => _serverInfo = value;
     }
 
     public bool NotifyOnlyMention

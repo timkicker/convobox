@@ -22,6 +22,7 @@ public class MainViewModel : ViewModelBase
         Locator.CurrentMutable.Register(() => new ChatView(), typeof(IViewFor<ChatViewModel>));
         Locator.CurrentMutable.Register(() => new DashboardView(), typeof(IViewFor<DashboardViewModel>));
         Locator.CurrentMutable.Register(() => new SettingsView(), typeof(IViewFor<SettingsViewModel>));
+        Locator.CurrentMutable.Register(() => new ImageDisplayView(), typeof(IViewFor<ImageDisplayView>));
         
         
     }

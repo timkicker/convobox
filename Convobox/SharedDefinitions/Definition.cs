@@ -6,8 +6,12 @@ namespace SharedDefinitions;
 public static class Definition
 {
 
-    public static int MessageGetDefault { get; } = 50;
+    public static int MessageGetDefault { get; } = 40;
     public static int MaxUsernameLength { get; } = 10;
+    public static int MaxMessageBytes { get; } = 130000;
+    public static int DefaultPortCommunication { get; } = 5000;
+    public static int DefaultPortFiles { get; } = 8081;
+    public static string DefaultDomain { get; } = "localhost";
 
     
 

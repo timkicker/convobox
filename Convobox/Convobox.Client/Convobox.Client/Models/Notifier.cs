@@ -30,7 +30,7 @@ public static class Notifier
     }
     
     
-    public static async Task ShowMessage(ConvoMessage msg)
+    public static async Task ShowReceivedMessage(ConvoMessage msg)
     {
         if (_notificationManager is null)
             return;
@@ -40,10 +40,35 @@ public static class Notifier
             return;
         }
 
+        string notificationText;
+
+        if (msg.FileAttached)
+            notificationText = "File: " + msg.FileName;
+        else notificationText = msg.Data;
+
         var notification = new Notification
         {
             Title = msg.User.Name,
-            Body = msg.Data,
+            Body = notificationText
+        };
+        
+        DateTimeOffset dateOffset1, dateOffset2;
+        
+        
+        dateOffset1 = DateTimeOffset.Now;
+        dateOffset2 = DateTimeOffset.Now + new TimeSpan(0,0,0,10);
+        
+        _notificationManager.ShowNotification(notification);
+        
+    }
+    
+    public static async Task ShowCustom(string title, string message)
+    {
+
+        var notification = new Notification
+        {
+            Title = title,
+            Body = message,
         };
         
         DateTimeOffset dateOffset1, dateOffset2;

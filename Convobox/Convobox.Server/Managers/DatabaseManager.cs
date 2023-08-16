@@ -63,7 +63,7 @@ public class DatabaseManager
                 connection.Open();
 
                 var command = connection.CreateCommand();
-                command.CommandText = $"select * FROM (select convo_message.id,convo_message.user_id,convo_message.data,convo_message.creation_date, user.name,user.color from convo_message inner join user on user.id = convo_message.user_id order by convo_message.id desc limit @amount) order by id;";
+                command.CommandText = $"select * FROM (select convo_message.id,convo_message.user_id,convo_message.data,convo_message.creation_date, user.name,user.color,convo_message.file from convo_message inner join user on user.id = convo_message.user_id order by convo_message.id desc limit @amount) order by id;";
                 
                 command.Parameters.Add("@amount", SqliteType.Text);
                 command.Parameters["@amount"].Value = amount;
@@ -78,22 +78,50 @@ public class DatabaseManager
                         DateTime creation = ParseToCSDateTime(reader.GetString(3));
                         string name = reader.GetString(4);
                         Color userColor = GetColor(reader.GetString(5));
+                        string file = "";
+
+                        if (reader[6].GetType() != typeof(DBNull))
+                        {
+                            file = reader.GetString(6);
+                        }
 
                         var user = new User();
                         user.Id = user_id;
                         user.Color = userColor;
                         user.Name = name;
                         
+                        // get real filename
+                        string realFileName = "";
+                        if (!string.IsNullOrEmpty(file))
+                        {
+                            var realFileNameCommand = connection.CreateCommand();
+                            realFileNameCommand.CommandText = $"select name from file_name where file=@file;";
+                        
+                            realFileNameCommand.Parameters.Add("@file", SqliteType.Text);
+                            realFileNameCommand.Parameters["@file"].Value = file;
+
+                            var realReader = realFileNameCommand.ExecuteReader();
+                            while (realReader.Read())
+                            {
+                                realFileName = realReader.GetString(0);
+                            }
+                        }
+                        
+                        
+                        
+                        
                         var msg = new ConvoMessage()
                         {
                             Id = id,
                             User = user,
                             Creation = creation,
-                            Data = data
+                            Data = data,
+                            UniqueFileName = file,
+                            FileName = realFileName
                         };
+
                         
                         list.Add(msg);
-
                     }
                 }
                 
@@ -116,7 +144,7 @@ public class DatabaseManager
                 connection.Open();
 
                 var command = connection.CreateCommand();
-                command.CommandText = $"insert into convo_message (user_id,data,creation_date) values(@userId,@data,@creationDate);";
+                command.CommandText = $"insert into convo_message (user_id,data,creation_date,file) values(@userId,@data,@creationDate,@file);";
                 
                 command.Parameters.Add("@userId", SqliteType.Integer);
                 command.Parameters["@userId"].Value = msg.User.Id;
@@ -126,6 +154,22 @@ public class DatabaseManager
                 
                 command.Parameters.Add("@creationDate", SqliteType.Text);
                 command.Parameters["@creationDate"].Value = ParseToSQLiteDateTime(msg.Creation);
+
+                if (!string.IsNullOrEmpty(msg.Base64File))
+                {
+                    string fileName = InsertFileIntoTable(msg);
+                    
+                    command.Parameters.Add("@file", SqliteType.Text);
+                    command.Parameters["@file"].Value = fileName;
+
+                    msg.UniqueFileName = fileName;
+                }
+                else
+                {
+                    command.Parameters.Add("@file", SqliteType.Text);
+                    command.Parameters["@file"].Value = "";
+                }
+                
                 command.ExecuteReader();
                 
                 var getIdCommand = connection.CreateCommand();
@@ -184,6 +228,43 @@ public class DatabaseManager
         }
 
         return false;
+    }
+
+    public static string InsertFileIntoTable(ConvoMessage msg)
+    {
+        string fileName = msg.FileName;
+        byte[] file = msg.GetFile();
+
+        string uniqueFileName = StorageManager.SaveFile(file, fileName);
+        
+        // save in database
+        try
+        {
+            using (var connection = new SqliteConnection(databaseLocation))
+            {
+                connection.Open();
+
+                var command = connection.CreateCommand();
+                command.CommandText = $"insert into file_name (file,name) values(@file,@name);";
+                
+                command.Parameters.Add("@file", SqliteType.Text);
+                command.Parameters["@file"].Value = uniqueFileName;
+                
+                command.Parameters.Add("@name", SqliteType.Text);
+                command.Parameters["@name"].Value = fileName;
+
+                var reader = command.ExecuteReader();
+
+            }
+
+            return uniqueFileName;
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+        
+        
     }
 
     public static int CreateUser(User userToCreate)

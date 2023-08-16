@@ -3,7 +3,9 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Convobox.Client.Models;
 using Convobox.Client.ViewModels;
+using Convobox.Server;
 
 namespace Convobox.Client.Views;
 
@@ -18,6 +20,13 @@ public partial class ChatView : UserControl
 
     private void Control_OnLoaded(object? sender, RoutedEventArgs e)
     {
+        var getInfo = new CommandMessge()
+        {
+            Type = CommandType.GetServerInfoReq
+        };
+        ClientConversationManager.Send(getInfo);
+        
+        NavigationStore.TopLevel = TopLevel.GetTopLevel(this);
         ChatScrollViewer.ScrollToEnd();
     }
 
@@ -32,5 +41,20 @@ public partial class ChatView : UserControl
         {
             ChatViewModel.Current.SendButtonCommand.Execute();
         }
+    }
+
+    private void Button_OnClick(object? sender, RoutedEventArgs e)
+    {
+        ConvoMessage myValue = (ConvoMessage)((Button)sender).Tag;
+
+        ChatViewModel.Current.SaveFileAsync(myValue);
+    }
+
+    private void ViewImageButton_OnClick(object? sender, RoutedEventArgs e)
+    {
+        ConvoMessage myValue = (ConvoMessage)((Button)sender).Tag;
+
+        var display = new ImageDisplayViewModel(myValue);
+        NavigationStore.SwitchMainTo(display);
     }
 }

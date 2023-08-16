@@ -24,8 +24,8 @@ public class LoginViewModel : ViewModelBase
 
     public LoginViewModel()
     {
-        _portString = "5000";
-        _address = "localhost";
+        _portString = Settings.Current.ServerInfo.PortCommunication.ToString();
+        _address = Settings.Current.ServerInfo.Domain;
         TryLoginCommand = ReactiveCommand.CreateFromObservable(LoginButtonCommand);
         TryRegisterCommand = ReactiveCommand.CreateFromObservable(RegisterButtonCommand);
         
@@ -94,10 +94,17 @@ public class LoginViewModel : ViewModelBase
                     Type = CommandType.MessagesReq
                 };
                 
+                
+                
                 ClientConversationManager.Send(getRooms);
+                
+
+                Settings.Current.ServerInfo.Domain = _address;
+                Settings.Current.ServerInfo.PortCommunication = Convert.ToInt32(_portString);
                 
                 // switch view
                 var dash = new DashboardViewModel();
+                NavigationStore.Dashboard = dash;
                 NavigationStore.SwitchMainTo(dash);
             }
             else
@@ -165,6 +172,7 @@ public class LoginViewModel : ViewModelBase
                 ClientConversationManager.Send(getRooms);
                 // switch view
                 var dash = new DashboardViewModel();
+                NavigationStore.Dashboard = dash;
                 NavigationStore.SwitchMainTo(dash);
                 
             }

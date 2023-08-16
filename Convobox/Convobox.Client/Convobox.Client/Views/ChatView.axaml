@@ -1,78 +1,229 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Convobox.Client.Views.ChatView"
-             x:CompileBindings="False"
-             xmlns:cv="clr-namespace:Convobox.Client.Converters"
-             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
-             Loaded="Control_OnLoaded"
-             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
-    
-    <UserControl.Styles>
-        <Style Selector="TextBlock.h1">
-        </Style>
-    </UserControl.Styles>
-    
-    <UserControl.Resources>
-        <cv:ColorConverter x:Key="ColorConverter"/>
-        <cv:ThicknessConverter x:Key="ThicknessConverter"/>
-        <cv:ThicknessTestConverter x:Key="ThicknessTestConverter"/>
-    </UserControl.Resources>
-    
-    
-    <DockPanel LastChildFill="True">
-        <Grid DockPanel.Dock="Bottom" Height="50" Background="#262626">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="50"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <TextBox KeyDown="InputElement_OnKeyDown" KeyUp="InputElement_OnKeyUp" Classes="Floating" Margin="10 0 0 0 " AcceptsReturn="True" MaxHeight="100" TextWrapping="Wrap" Text="{Binding EnteredText}"></TextBox>
-            <Button Grid.Column="1" Margin="6" Classes="Flat" Command="{Binding SendButtonCommand}">
-            <materialIcons:MaterialIcon
-                Width="20" Height="20"
-                Kind="Send"
-            />
-            </Button>
-        </Grid>
-        <ScrollViewer Margin="20 0 20 5" x:Name="ChatScrollViewer">
-            <DockPanel LastChildFill="True">
-                <Button DockPanel.Dock="Top" Content="Load more" Margin="10 10 10 20" MaxWidth="200" MaxHeight="50" IsVisible="{Binding ShowGetButton}" Command="{Binding RequestMoreMessagesCommand}"></Button>
-                <ItemsRepeater ItemsSource="{Binding History}" x:Name="ChatItemsRepeater" DockPanel.Dock="Bottom">
-                    <ItemsRepeater.ItemTemplate >
-                        <DataTemplate>
-                            <Grid Margin="0 0 15 0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="100"></ColumnDefinition>
-                                    <ColumnDefinition></ColumnDefinition>
-                                    <ColumnDefinition Width="80"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                            
-                                <TextBlock 
-                                    HorizontalAlignment="Right" 
-                                    Text="{Binding UsernameDisplay}" 
-                                    Foreground="{Binding User.Color, Converter={StaticResource ColorConverter}}" 
-                                    Margin="{Binding Space, Converter={StaticResource ThicknessConverter}}"  ></TextBlock>
-                                
-                                <SelectableTextBlock 
-                                    FontFamily="{Binding ElementName=DateBlock, Path=FontFamily, Mode=OneWay}"
-                                    Margin="{Binding Space, Converter={StaticResource ThicknessConverter}}"  
-                                    TextWrapping="Wrap" 
-                                    Grid.Column="1" Text="{Binding Data}" ></SelectableTextBlock>
-                                
-                                <TextBlock  Grid.Column="2" 
-                                            x:Name="DateBlock"
-                                            Text="{Binding DateDisplay}"
-                                            HorizontalAlignment="Right"
-                                            Foreground="DarkGray" 
-                                            Margin="{Binding Space, Converter={StaticResource ThicknessConverter}}"  ></TextBlock>
-                            
-                            </Grid>
-                        </DataTemplate>
-                    </ItemsRepeater.ItemTemplate>
-                </ItemsRepeater>
-            </DockPanel>
-        </ScrollViewer>
-    </DockPanel>
+<UserControl
+    Loaded="Control_OnLoaded"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d"
+    x:Class="Convobox.Client.Views.ChatView"
+    x:CompileBindings="False"
+	xmlns="https://github.com/avaloniaui"
+	xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+	xmlns:cv="clr-namespace:Convobox.Client.Converters"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<UserControl.Styles>
+		<Style Selector="TextBlock.h1" />
+	</UserControl.Styles>
+	<UserControl.Resources>
+		<cv:ColorConverter x:Key="ColorConverter" />
+		<cv:ThicknessConverter x:Key="ThicknessConverter" />
+		<cv:ThicknessTestConverter x:Key="ThicknessTestConverter" />
+		<cv:GetImageFromMessageConverter x:Key="GetImageFromMessageConverter" />
+		<cv:DataTextConverter x:Key="DataTextConverter" />
+	</UserControl.Resources>
+	<!--  chat textbox  -->
+	<DockPanel LastChildFill="True">
+		<Grid
+            Background="#262626"
+            DockPanel.Dock="Bottom"
+            Height="50">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />
+				<ColumnDefinition Width="50" />
+				<ColumnDefinition Width="50" />
+			</Grid.ColumnDefinitions>
+			<TextBox
+                AcceptsReturn="True"
+                Classes="Floating"
+                KeyDown="InputElement_OnKeyDown"
+                KeyUp="InputElement_OnKeyUp"
+                Margin="10,0,0,0"
+                MaxHeight="100"
+                Text="{Binding EnteredText}"
+                TextWrapping="Wrap" />
+			<Button
+                Classes="Flat"
+                Command="{Binding SelectFilesButtonCommand}"
+                Grid.Column="1"
+                Margin="6">
+				<materialIcons:MaterialIcon
+                    Height="20"
+                    Kind="File"
+                    Width="20" />
+			</Button>
+			<Button
+                Classes="Flat"
+                Command="{Binding SendButtonCommand}"
+                Grid.Column="2"
+                Margin="6">
+				<materialIcons:MaterialIcon
+                    Height="20"
+                    Kind="Send"
+                    Width="20" />
+			</Button>
+		</Grid>
+		<!--  Chat History  -->
+		<Grid>
+			<ScrollViewer
+                IsScrollInertiaEnabled="True"
+                Margin="20,0,20,0"
+                x:Name="ChatScrollViewer">
+				<DockPanel LastChildFill="True">
+					<!--  Space between textbox and chat history  -->
+					<Label DockPanel.Dock="Bottom" Height="15" />
+					<Button
+                        Command="{Binding RequestMoreMessagesCommand}"
+                        Content="Load more"
+                        DockPanel.Dock="Top"
+                        IsVisible="{Binding ShowGetButton}"
+                        Margin="10,10,10,20"
+                        MaxHeight="50"
+                        MaxWidth="200" />
+					<Grid DockPanel.Dock="Bottom">
+						<ItemsRepeater ItemsSource="{Binding History}" x:Name="ChatItemsRepeater">
+							<ItemsRepeater.ItemTemplate>
+								<DataTemplate>
+									<StackPanel>
+										<Grid
+                                            IsEnabled="{Binding HasText}"
+                                            IsVisible="{Binding HasText}"
+                                            Margin="0,0,15,0">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="100" />
+												<ColumnDefinition />
+												<ColumnDefinition Width="80" />
+											</Grid.ColumnDefinitions>
+											<TextBlock
+                                                Foreground="{Binding User.Color, Converter={StaticResource ColorConverter}}"
+                                                HorizontalAlignment="Right"
+                                                Margin="{Binding Space, Converter={StaticResource ThicknessConverter}}"
+                                                Text="{Binding UsernameDisplay}" />
+											<SelectableTextBlock
+                                                FontFamily="{Binding ElementName=DateBlock, Path=FontFamily, Mode=OneWay}"
+                                                Grid.Column="1"
+                                                Margin="{Binding Space, Converter={StaticResource ThicknessConverter}}"
+                                                Text="{Binding Data, Converter={StaticResource DataTextConverter}}"
+                                                TextWrapping="Wrap" />
+											<TextBlock
+                                                Foreground="DarkGray"
+                                                Grid.Column="2"
+                                                HorizontalAlignment="Right"
+                                                Margin="{Binding Space, Converter={StaticResource ThicknessConverter}}"
+                                                Text="{Binding DateDisplay}"
+                                                x:Name="DateBlock" />
+										</Grid>
+										<!--  file attachment  -->
+										<Grid IsVisible="{Binding ShowGeneralFileDisplay}" Margin="0,5,15,5">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition MaxWidth="100" />
+												<ColumnDefinition />
+												<ColumnDefinition Width="80" />
+											</Grid.ColumnDefinitions>
+											<TextBlock
+                                                Foreground="DarkGray"
+                                                Grid.Column="2"
+                                                HorizontalAlignment="Right"
+                                                IsVisible="{Binding !HasText}"
+                                                Margin="{Binding Space, Converter={StaticResource ThicknessConverter}}"
+                                                Text="{Binding DateDisplay}" />
+											<controls:Card
+                                                Grid.Column="1"
+                                                HorizontalAlignment="Left"
+                                                MaxHeight="50"
+                                                MaxWidth="350">
+												<Grid>
+													<Grid.ColumnDefinitions>
+														<ColumnDefinition />
+														<ColumnDefinition Width="2*" />
+														<ColumnDefinition />
+													</Grid.ColumnDefinitions>
+													<materialIcons:MaterialIcon
+                                                        Height="20"
+                                                        Kind="File"
+                                                        Margin="0,2,5,0"
+                                                        Width="20" />
+													<TextBlock
+                                                        Grid.Column="1"
+                                                        Margin="10,0,10,0"
+                                                        Text="{Binding FileName}"
+                                                        VerticalAlignment="Center" />
+													<Button
+                                                        Click="Button_OnClick"
+                                                        Grid.Column="2"
+                                                        Tag="{Binding .}">
+														<materialIcons:MaterialIcon
+                                                            Height="20"
+                                                            HorizontalAlignment="Center"
+                                                            Kind="Download"
+                                                            Margin="0,2,5,0"
+                                                            Width="20" />
+													</Button>
+												</Grid>
+											</controls:Card>
+										</Grid>
+										<!--  Image display  -->
+										<Grid HorizontalAlignment="Left" IsVisible="{Binding IsImage}">
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="100" />
+												<ColumnDefinition />
+												<ColumnDefinition Width="80" />
+											</Grid.ColumnDefinitions>
+											
+											<Image Margin="0 5 0 5" Height="200" Width="200" 
+											       Grid.Column="1"
+											       Stretch="UniformToFill"
+											       Source="{Binding ., Converter={StaticResource GetImageFromMessageConverter}}"/>
+											
+											<Button Tag="{Binding .}" Opacity="0" Grid.Column="1" x:Name="ViewImageButton" Click="ViewImageButton_OnClick">
+												<!--  Switch to image display view  -->
+											</Button>
+										</Grid>
+										
+										
+									</StackPanel>
+								</DataTemplate>
+							</ItemsRepeater.ItemTemplate>
+						</ItemsRepeater>
+					</Grid>
+				</DockPanel>
+			</ScrollViewer>
+			<!--  Selected file infobox  -->
+			<controls:Card
+                DockPanel.Dock="Bottom"
+                HorizontalAlignment="Right"
+                IsVisible="{Binding ShowSelectedFilesBox}"
+                MaxHeight="30"
+                MaxWidth="250"
+                VerticalAlignment="Bottom">
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="4*" />
+						<ColumnDefinition />
+					</Grid.ColumnDefinitions>
+					<TextBlock HorizontalAlignment="Right" Text="{Binding SelectedFileInfoBoxText}" />
+					<Button
+                        Classes="Flat"
+                        Command="{Binding ClearFilesButtonCommand}"
+                        Grid.Column="1"
+                        Margin="5,0,0,0">
+						<materialIcons:MaterialIcon
+                            Height="15"
+                            Kind="Clear"
+                            Width="15" />
+					</Button>
+				</Grid>
+			</controls:Card>
+			<!--  error send infobox  -->
+			<controls:Card
+                DockPanel.Dock="Bottom"
+                Foreground="{Binding ErrorBoxColor}"
+                IsVisible="{Binding ShowErrorText}"
+                Margin="5,0,5,0"
+                MaxHeight="30"
+                VerticalAlignment="Bottom">
+				<TextBlock HorizontalAlignment="Center" Text="{Binding ErrorText}" />
+			</controls:Card>
+		</Grid>
+	</DockPanel>
 </UserControl>
