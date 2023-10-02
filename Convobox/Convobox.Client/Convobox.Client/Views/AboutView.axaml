@@ -1,0 +1,128 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:Material.Styles.Controls;assembly=Material.Styles"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+             xmlns:mdxaml="https://github.com/whistyun/Markdown.Avalonia.Tight"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:CompileBindings="False"
+             x:Class="Convobox.Client.Views.AboutView">
+    <Grid>
+        <TabControl>
+            
+            <TabItem>
+                <TabItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <materialIcons:MaterialIcon
+                            HorizontalAlignment="Right"
+                            Height="20"
+                            Margin="0 2 5 0"
+                            Kind="Code"
+                            Width="20" />
+                        <TextBlock Grid.Column="1" Text="Developer" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    </Grid>
+                </TabItem.Header>
+                
+                <controls:Card MaxWidth="400" MaxHeight="500" Margin="20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1.5*"></RowDefinition>
+                            <RowDefinition></RowDefinition>
+                            <RowDefinition MaxHeight="50"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        
+                        <Ellipse Width="{Binding ElementName=borderEllipse, Path=Height}"
+                                 x:Name="borderEllipse"
+                                 Height="200"
+                                 Grid.Row="0" Margin="5">
+                            <Ellipse.Fill>
+                                <ImageBrush Source="{Binding ProfileImage}" />
+                            </Ellipse.Fill>
+                        </Ellipse>
+                        
+                        <SelectableTextBlock 
+                            HorizontalAlignment="Center" VerticalAlignment="Center" 
+                            Grid.Row="1"> Thank you for using my software! c: </SelectableTextBlock>
+                        
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Button
+                                Command="{Binding GithubButtonCommand}"
+                                Grid.Column="0" Margin="5 0 2.5 0" Foreground="White">
+                                <materialIcons:MaterialIcon
+                                    HorizontalAlignment="Center"
+                                    Kind="Github"
+                                    Height="30"
+                                    Width="30"
+                                    Margin="10"/>
+                                
+                            </Button>
+                            
+                            <Button
+                                Command="{Binding BlogButtonCommand}"
+                                Grid.Column="1" Margin="2.5 0 2.5 0" Foreground="White">
+                                <materialIcons:MaterialIcon
+                                    HorizontalAlignment="Center"
+                                    Kind="Blog"
+                                    Height="30"
+                                    Width="30"
+                                    Margin="10"/>
+                                
+                            </Button>
+                            
+                            <Button
+                                Command="{Binding MailButtonCommand}"
+                                Grid.Column="2" Margin="2.5 0 5 0" Foreground="White">
+                                <materialIcons:MaterialIcon
+                                    HorizontalAlignment="Center"
+                                    Kind="Mailbox"
+                                    Height="30"
+                                    Width="30"
+                                    Margin="10"/>
+                                
+                            </Button>
+                            
+                        </Grid>
+                        
+                    </Grid>
+                </controls:Card>
+                
+            </TabItem>
+            
+            <TabItem>
+                <TabItem.Header>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition></ColumnDefinition>
+                            <ColumnDefinition></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <materialIcons:MaterialIcon
+                            Height="20"
+                            Margin="0 2 5 0"
+                            HorizontalAlignment="Right"
+                            Kind="NewspaperVariant"
+                            Width="20" />
+                        <TextBlock Grid.Column="1" Text="Changelog" HorizontalAlignment="Left" VerticalAlignment="Center"></TextBlock>
+                    </Grid>
+                </TabItem.Header>
+                <controls:Card Margin="10" Background="White" Theme="">
+                    <mdxaml:MarkdownScrollViewer
+                        Source="avares://Convobox.Client/Assets/ChangeLog.md"/>
+                </controls:Card>
+                
+            </TabItem>
+            
+        </TabControl>
+    </Grid>
+</UserControl>

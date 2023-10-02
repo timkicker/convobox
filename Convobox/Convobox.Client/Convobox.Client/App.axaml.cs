@@ -53,17 +53,25 @@ public partial class App : Application
         try
         {
             Settings.Load();
-            Settings.Current.LoadTheme();
-            Settings.Current.LoadPrimaryColor();
+            var themeStyle = Settings.Current.GetTheme();
+            var color = Settings.Current.GetPrimaryColor();
             
-            ThemeManager.SetTheme(Settings.Current.Theme);
-            ThemeManager.SetPrimaryColor(Settings.Current.ColorTheme);
+            var theme = Theme.Create(themeStyle, color, color);
+            var themeBootstrap = this.LocateMaterialTheme<MaterialThemeBase>();
+
+            if (theme == Theme.Light)
+            {
+                // enjoy burning your eyes
+            }
+
+            Dispatcher.UIThread.Post(() => { themeBootstrap.CurrentTheme = theme; }, DispatcherPriority.Default);
             
              login.Username = Settings.Current.Username;
              login.Password = Settings.Current.GetPassword();
 
              if (login.Username.Length > 0 && login.Password.Length > 0)
                  login.TryLoginCommand.Execute();
+            
         }
         catch (Exception e)
         {

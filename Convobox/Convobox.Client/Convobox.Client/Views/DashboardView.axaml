@@ -40,19 +40,20 @@
                           Grid.Column="0"/>
                         <TextBlock Grid.Column="1" Text="{Binding Title}" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Left" ></TextBlock>
                       </Grid>
-                      <Button Click="Button_OnClick" Tag="{Binding Title}" Theme="{StaticResource FlatButton}" >
-                        
+                      <Button Click="Button_OnClick" 
+                              Tag="{Binding Title}" 
+                              Theme="{StaticResource FlatButton}">
                       </Button>
-                      
                     </Grid>
-                   
                   </DataTemplate>
                 </ItemsRepeater.ItemTemplate>
               </ItemsRepeater>
             </DockPanel>
           </ScrollViewer>
         </controls:NavigationDrawer.LeftDrawerContent>
+    
     <DockPanel>
+      
       <controls:Card Margin="16 16 16 0" Height="56" DockPanel.Dock="Top">
         <Grid >
           <Grid.ColumnDefinitions>
@@ -97,11 +98,9 @@
           <!-- Main page -->
           <views:ChatView DataContext="{Binding ChatViewModel}"/>
           <views:SettingsView DataContext="{Binding SettingsViewModel}"/>
+          <views:AboutView DataContext="{Binding AboutViewModel}"/>
         </Carousel>
       </Border>
-      
     </DockPanel>
-     
-        
     </controls:NavigationDrawer>
 </UserControl>

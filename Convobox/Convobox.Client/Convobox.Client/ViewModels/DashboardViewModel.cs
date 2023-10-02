@@ -13,17 +13,23 @@ public class DashboardViewModel : ViewModelBase
     private SettingsViewModel _settingsViewModel;
     private ObservableCollection<ViewModelBase> _userViews;
     private ViewModelBase _selectedView;
+    private AboutViewModel _aboutViewModel;
     private bool _toggleButtonChecked;
+    private TestViewModel _testViewModel;
     
     public DashboardViewModel()
     {
         Current = this;
         _chatViewModel = new ChatViewModel();
         _settingsViewModel = new SettingsViewModel();
+        _aboutViewModel = new AboutViewModel();
+        _testViewModel = new TestViewModel();
         SelectedView = _chatViewModel;
         _userViews = new ObservableCollection<ViewModelBase>();
         _userViews.Add(_chatViewModel);
+        //_userViews.Add(_testViewModel);
         _userViews.Add(_settingsViewModel);
+        _userViews.Add(_aboutViewModel);
         ToggleButtonChecked = false;
         LogoutButtonCommand = ReactiveCommand.CreateFromObservable(LogoutCommand);
     }
@@ -53,6 +59,12 @@ public class DashboardViewModel : ViewModelBase
     {
         get => _chatViewModel;
         set => _chatViewModel = value ?? throw new ArgumentNullException(nameof(value));
+    }
+
+    public AboutViewModel AboutViewModel
+    {
+        get => _aboutViewModel;
+        set => _aboutViewModel = value ?? throw new ArgumentNullException(nameof(value));
     }
 
     public SettingsViewModel SettingsViewModel

@@ -19,12 +19,14 @@ public class MainViewModel : ViewModelBase
         
         // register vm/v
         Locator.CurrentMutable.Register(() => new LoginView(), typeof(IViewFor<LoginViewModel>));
+        Locator.CurrentMutable.Register(() => new TestView(), typeof(IViewFor<TestViewModel>));
         Locator.CurrentMutable.Register(() => new ChatView(), typeof(IViewFor<ChatViewModel>));
+        Locator.CurrentMutable.Register(() => new AboutView(), typeof(IViewFor<AboutViewModel>));
         Locator.CurrentMutable.Register(() => new DashboardView(), typeof(IViewFor<DashboardViewModel>));
         Locator.CurrentMutable.Register(() => new SettingsView(), typeof(IViewFor<SettingsViewModel>));
-        Locator.CurrentMutable.Register(() => new ImageDisplayView(), typeof(IViewFor<ImageDisplayView>));
+        Locator.CurrentMutable.Register(() => new ImageDisplayView(), typeof(IViewFor<ImageDisplayViewModel>));
         
-        
+        // just changed from view -> viewmodel, if something should not work, and added line beneith
     }
     
     public ViewModelBase CurrentViewModel

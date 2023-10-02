@@ -9,6 +9,7 @@ using Material.Styles.Themes;
 using Material.Styles.Themes.Base;
 using Newtonsoft.Json;
 using SharedDefinitions;
+using Color = Avalonia.Media.Color;
 
 namespace Convobox.Client.Models;
 
@@ -105,22 +106,24 @@ public class Settings
         set => _notifyOnlyMention = value;
     }
 
-    public void LoadTheme()
+    public IBaseTheme GetTheme()
     {
         switch (ThemeName)
         {
             case "Dark":
-                App.ThemeManager.SetTheme(Material.Styles.Themes.Theme.Dark);
+                return Material.Styles.Themes.Theme.Dark;
                 break;
             case "Light":
-                App.ThemeManager.SetTheme(Material.Styles.Themes.Theme.Light);
+                return Material.Styles.Themes.Theme.Light;
                 break;
+            default:
+                return Material.Styles.Themes.Theme.Dark;
         }
     }
     
-    public void LoadPrimaryColor()
+    public Color GetPrimaryColor()
     {
-        App.ThemeManager.SetPrimaryColor(ColorTheme);
+        return ColorTheme;
     }
 
     public string GetPassword()
